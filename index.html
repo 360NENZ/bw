@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilibili World 2026 Countdown</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+     <video class="bg-video" autoplay loop muted playsinline>
+         <source src="dh.mp4" type="video/mp4">
+         您的浏览器不支持 HTML5 视频。
+     </video>
+        <div class="video-overlay"></div>
+
+    <!--<nav class="top-bar">
+        <div class="nav-btn">⏻ 主页面</div>
+        <div class="nav-btn">+ 添加组件</div>
+        <div class="nav-btn">▼ 筛选</div>
+        <div class="nav-btn">↻ 设置自动化发送</div>
+    </nav>-->
+
+    <div class="container">
+        <aside class="left-panel">
+            <div>
+                <div class="welcome-text">欢迎来到<del>我的</del>Bilibili World<br>Bilibili Macro Link世界，</div>
+                <div class="sub-text"><del>这里将及时更新相关漫展信息和实时内容和攻略。</del></div>
+            </div>
+
+            <div class="contributor-list">
+                <span class="contributor-title">本页面由以下大佬提供:</span>
+                <span class="name-tag">Gemini3 Pro</span>
+                <span class="name-tag">lrastar</span>
+            </div>
+        </aside>
+
+        <main class="center-panel">
+            <div class="big-logo">
+                Bilibili<br><span>World</span>
+            </div>
+        </main>
+
+        <aside class="right-panel">
+            <div class="countdown-card">
+                <div class="countdown-header">
+                    距离 <span class="highlight">Bilibili World 2026</span> 还有
+                </div>
+                <div class="timer-grid">
+                    <div class="time-box">
+                        <div class="time-val" id="days">000</div>
+                        <div class="time-label">天</div>
+                    </div>
+                    <div class="time-box">
+                        <div class="time-val" id="hours">00</div>
+                        <div class="time-label">时</div>
+                    </div>
+                    <div class="time-box">
+                        <div class="time-val" id="minutes">00</div>
+                        <div class="time-label">分</div>
+                    </div>
+                    <div class="time-box">
+                        <div class="time-val" id="seconds">00</div>
+                        <div class="time-label">秒</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <ul class="info-list">
+                    <li>FNMDDP,NMSL?</li>
+                    <li></li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <button class="fullscreen-control" id="fullscreenBtn" title="全屏演示">
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>
