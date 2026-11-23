@@ -1,56 +1,107 @@
-// 使用明确的北京时间，避免访问者所在时区改变活动时刻。
-const EVENT_START = new Date('2026-07-10T08:00:00+08:00').getTime();
-const EVENT_END = new Date('2026-07-12T18:00:00+08:00').getTime();
-const OPENING_HOUR = 8;
-const CLOSING_HOUR = 18;
-const timeFields = ['days', 'hours', 'minutes', 'seconds'].map(id => document.getElementById(id));
-const countdownTitle = document.getElementById('countdownTitle');
-const eventStatus = document.getElementById('eventStatus');
-const countdownNote = document.getElementById('countdownNote');
+const selection = BWEvents.resolveYear(location.search);
+const currentEvent = selection.event;
 const showOpeningHours = new URLSearchParams(location.search).get('showHours') === '1';
-document.getElementById('openingHours').hidden = !showOpeningHours;
+const element = id => document.getElementById(id);
+
+element('brandYear').textContent = selection.year || '年份无效';
+element('eventYear').textContent = selection.year || '';
+element('eventTag').textContent = selection.year ? `BW ${selection.year}` : 'BW';
+element('selectedYear').textContent = selection.year || '选择年份';
+element('yearPicker').hidden = false;
+element('openingHours').hidden = !currentEvent || !showOpeningHours;
+
+function yearUrl(year) {
+    const url = new URL(location.href);
+    url.searchParams.set('year', year);
+    url.hash = '';
+    return url.href;
+}
+Object.values(BWEvents.events).reverse().forEach(event => {
+    const link = document.createElement('a');
+    link.href = yearUrl(event.year);
+    link.textContent = String(event.year);
+    if (event === currentEvent) link.setAttribute('aria-current', 'page');
+    element('yearLinks').append(link);
+});
+element('returnLink').href = yearUrl(2026);
+
+if (currentEvent) {
+    document.title = `Bilibili World ${currentEvent.year} · ${currentEvent.theme}`;
+    element('themeName').textContent = currentEvent.theme;
+    element('venue').textContent = currentEvent.venue;
+    element('startDate').dateTime = currentEvent.startDate;
+    element('startDate').textContent = currentEvent.startDate.replaceAll('-', '.');
+    element('endDate').dateTime = currentEvent.endDate;
+    element('endDate').textContent = currentEvent.endDate.slice(5).replace('-', '.');
+    element('visualNote').textContent = currentEvent.visualNote;
+    document.documentElement.style.setProperty('--poster', `url("${currentEvent.poster}")`);
+    document.documentElement.style.setProperty('--background-color', currentEvent.color);
+    document.documentElement.dataset.year = currentEvent.year;
+    document.querySelector('meta[name="theme-color"]').content = currentEvent.color;
+    element('backgroundVideo').poster = currentEvent.poster;
+    if (currentEvent.video) element('backgroundVideo').dataset.src = currentEvent.video;
+} else {
+    document.title = selection.invalid ? 'BW · 年份参数无效' : `BW ${selection.year} · 暂未收录`;
+    element('themeName').textContent = '回望历年 BW';
+    element('eventLocation').hidden = true;
+    element('eventDate').hidden = true;
+    element('countdownPanel').hidden = true;
+    element('unavailablePanel').hidden = false;
+    element('countdown').dataset.phase = 'unavailable';
+    element('unavailableTitle').textContent = selection.invalid ? '年份参数需要四位数字' : `BW ${selection.year} 暂未收录`;
+    element('unavailableMessage').textContent = selection.invalid ? '例如在链接中使用 ?year=2025。也可以从右上角选择已收录年份。' : '尚未取得这一年的可验证主视觉与活动日期。请选择已收录年份，继续回望与 BW 的时光。';
+}
+
+document.addEventListener('click', event => {
+    if (!element('yearPicker').contains(event.target)) element('yearPicker').open = false;
+});
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && element('yearPicker').open) {
+        element('yearPicker').open = false;
+        element('yearPicker').querySelector('summary').focus();
+    }
+});
+
+const timeFields = ['days', 'hours', 'minutes', 'seconds'].map(element);
+const countdownTitle = element('countdownTitle');
+const eventStatus = element('eventStatus');
+const countdownNote = element('countdownNote');
 let lastState;
 
 function shouldShowFarewell(now = Date.now()) {
-    if (now < EVENT_START) return false;
-    if (now >= EVENT_END) return true;
-    const beijingHour = new Date(now + 8 * 3600000).getUTCHours();
-    return beijingHour >= CLOSING_HOUR || beijingHour < OPENING_HOUR;
+    return BWEvents.shouldShowFarewell(currentEvent, now);
 }
 
 function updateCountdown(now = Date.now()) {
-    const phase = now < EVENT_START ? 'upcoming' : now < EVENT_END ? 'ongoing' : 'ended';
-    const duration = phase === 'upcoming' ? EVENT_START - now : now - (phase === 'ongoing' ? EVENT_START : EVENT_END);
-    const totalSeconds = Math.floor(Math.max(0, duration) / 1000);
-    const values = [Math.floor(totalSeconds / 86400), Math.floor(totalSeconds / 3600) % 24, Math.floor(totalSeconds / 60) % 60, totalSeconds % 60];
+    const clock = BWEvents.getClock(currentEvent, now);
+    if (!clock) return;
+    const { phase, values, openingStatus, open } = clock;
     timeFields.forEach((field, index) => {
         const value = String(values[index]).padStart(index === 0 ? 3 : 2, '0');
         if (field.textContent !== value) field.textContent = value;
     });
-    const beijingHour = new Date(now + 8 * 3600000).getUTCHours();
-    const openingStatus = beijingHour < OPENING_HOUR ? '今日尚未开馆' : beijingHour < CLOSING_HOUR ? '现场开放中' : '今日已闭馆';
     const state = phase === 'ongoing' ? `${phase}:${openingStatus}` : phase;
     if (state !== lastState) {
         const copy = {
-            upcoming: ['距 BW 2026 开场还有', '准备启航', '下一站，与你在现场相见。'],
-            ongoing: ['BW 2026 已开场', openingStatus, beijingHour >= OPENING_HOUR && beijingHour < CLOSING_HOUR ? '相遇正在发生，尽情享受这场夏日的梦。' : `${showOpeningHours ? '每日 08:00–18:00 开放，' : ''}期待与你在现场相见。`],
-            ended: ['距 BW 2026 落幕已经', '期待再会', '旅途虽已到站，热爱仍在继续。']
+            upcoming: [`距 BW ${currentEvent.year} 开场还有`, '准备启航', '下一站，与你在现场相见。'],
+            ongoing: [`BW ${currentEvent.year} 已开场`, openingStatus, open ? '相遇正在发生，尽情享受这场夏日的梦。' : `${showOpeningHours ? '每日 08:00–18:00 开放，' : ''}期待与你在现场相见。`],
+            ended: [`距 BW ${currentEvent.year} 落幕已经`, '期待再会', '旅途虽已到站，热爱仍在继续。']
         }[phase];
         countdownTitle.textContent = copy[0];
         eventStatus.textContent = copy[1];
         countdownNote.textContent = copy[2];
-        document.getElementById('countdown').dataset.phase = phase;
+        element('countdown').dataset.phase = phase;
         lastState = state;
     }
 }
 updateCountdown();
-setInterval(() => updateCountdown(), 1000);
+if (currentEvent) setInterval(() => updateCountdown(), 1000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) updateCountdown(); });
 
-const video = document.getElementById('backgroundVideo');
-const motionBtn = document.getElementById('motionBtn');
-const motionLabel = document.getElementById('motionLabel');
-const motionIcon = document.getElementById('motionIcon');
+const video = element('backgroundVideo');
+const motionBtn = element('motionBtn');
+const motionLabel = element('motionLabel');
+const motionIcon = element('motionIcon');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 let videoFailed = false;
 let userPaused = false;
@@ -62,12 +113,9 @@ function updateMotionButton() {
     motionIcon.setAttribute('d', playing ? 'M9 5v14M15 5v14' : 'm8 5 11 7-11 7Z');
 }
 function playBackground() {
-    if (videoFailed) return;
+    if (videoFailed || !currentEvent?.video) return;
     if (!video.getAttribute('src')) video.src = video.dataset.src;
-    video.play().catch(() => {
-        // 自动播放受限时保留海报，允许用户主动播放。
-        updateMotionButton();
-    });
+    video.play().catch(updateMotionButton);
 }
 video.addEventListener('playing', () => { video.classList.add('is-playing'); updateMotionButton(); });
 video.addEventListener('pause', updateMotionButton);
@@ -89,12 +137,12 @@ document.addEventListener('visibilitychange', () => {
     if (document.hidden) video.pause();
     else if (!userPaused && !reducedMotion.matches) playBackground();
 });
-motionBtn.hidden = false;
+motionBtn.hidden = !currentEvent?.video;
 updateMotionButton();
 if (!reducedMotion.matches) playBackground();
 
-const fullscreenBtn = document.getElementById('fullscreenBtn');
-const feedback = document.getElementById('feedback');
+const fullscreenBtn = element('fullscreenBtn');
+const feedback = element('feedback');
 let feedbackTimeout;
 fullscreenBtn.hidden = !document.fullscreenEnabled;
 fullscreenBtn.addEventListener('click', async () => {
@@ -115,10 +163,14 @@ document.addEventListener('fullscreenchange', () => {
 });
 
 // 打开页面时仅在每日闭馆后或整届落幕后展示，不使用持久化标记跳过。
-const farewellDialog = document.getElementById('farewellDialog');
+const farewellDialog = element('farewellDialog');
 if (shouldShowFarewell() && typeof farewellDialog.showModal === 'function') {
+    const ended = BWEvents.getClock(currentEvent).phase === 'ended';
+    element('farewellContext').textContent = ended ? `BW ${currentEvent.year} 的旅程暂告一段落，这里继续记录我们与 BW 的时光。` : `BW ${currentEvent.year} 今日已闭馆，让我们带着热爱，期待明天再见。`;
+    // 保留 2026 寄语原文，不将其署名为往届寄语。
+    element('farewellOrigin').textContent = currentEvent.year === 2026 ? '非官方纪念页面 · 愿热爱常在' : `正在回望 BW ${currentEvent.year} · 以上小园长寄语来自 BW 2026`;
     farewellDialog.showModal();
     farewellDialog.addEventListener('close', () => {
-        document.getElementById('countdown').focus({ preventScroll: true });
+        element('countdown').focus({ preventScroll: true });
     });
 }

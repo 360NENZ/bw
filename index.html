@@ -4,26 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1549b8">
-    <meta name="description" content="Bilibili World 2026 非官方纪念页面。开场倒计时、活动时光与落幕正计时，热爱不散场。">
-    <title>Bilibili World 2026 · 次元新航线</title>
+    <meta name="description" content="Bilibili World 非官方纪念页面。回望历年主视觉，记录开场倒计时与落幕后的时光。">
+    <title>Bilibili World · 热爱不散场</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-    <link rel="preload" href="assets/bw-2026-poster.jpg" as="image">
     <link rel="stylesheet" href="style.css">
+    <script src="events.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 <body>
     <a class="skip-link" href="#countdown">跳转到倒计时</a>
     <div class="background" aria-hidden="true">
         <video id="backgroundVideo" class="background-video" loop muted playsinline preload="none"
-            poster="assets/bw-2026-poster.jpg" data-src="assets/bw-2026-banner.mp4" tabindex="-1"></video>
+            tabindex="-1"></video>
     </div>
     <div class="page-shell">
         <header class="site-header">
-            <a class="site-brand" href="./" aria-label="BW 2026 纪念页面首页">
-                <span class="brand-mark">BW<span>2026</span></span>
-                <span class="brand-caption">次元新航线<span>非官方纪念页面</span></span>
+            <a class="site-brand" href="./" aria-label="BW 纪念页面首页">
+                <span class="brand-mark">BW<span id="brandYear"></span></span>
+                <span class="brand-caption"><span class="theme-name" id="themeName">热爱不散场</span><span>非官方纪念页面</span></span>
             </a>
             <nav class="page-tools" aria-label="页面工具">
+                <details class="year-picker" id="yearPicker" hidden>
+                    <summary>历年 <span id="selectedYear"></span><span aria-hidden="true">⌄</span></summary>
+                    <nav class="year-menu" id="yearLinks" aria-label="选择 BW 年份"></nav>
+                </details>
                 <button class="tool-button" id="motionBtn" type="button" hidden>
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path id="motionIcon" d="M9 5v14M15 5v14"/></svg>
                     <span id="motionLabel">暂停背景</span>
@@ -36,18 +40,19 @@
         <main class="main-content">
             <section class="boarding-pass" id="countdown" aria-labelledby="eventTitle" tabindex="-1">
                 <div class="event-info">
-                    <div class="event-meta"><span class="flight-tag">BW 2026</span><span>和热爱一起出发</span></div>
-                    <h1 id="eventTitle">Bilibili World <span>2026</span></h1>
-                    <p class="event-location"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>上海 · 国家会展中心</p>
-                    <p class="event-date"><time datetime="2026-07-10">2026.07.10</time><span>—</span><time datetime="2026-07-12">07.12</time><span class="timezone">北京时间</span></p>
+                    <div class="event-meta"><span class="flight-tag" id="eventTag">BW</span><span>和热爱一起出发</span></div>
+                    <h1 id="eventTitle">Bilibili World <span id="eventYear"></span></h1>
+                    <p class="event-location" id="eventLocation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><span id="venue"></span></p>
+                    <p class="event-date" id="eventDate"><time id="startDate"></time><span>—</span><time id="endDate"></time><span class="timezone">北京时间</span></p>
                     <p class="opening-hours" id="openingHours" hidden>每日 08:00–18:00</p>
+                    <p class="visual-note" id="visualNote"></p>
                 </div>
-                <div class="countdown-panel">
+                <div class="countdown-panel" id="countdownPanel">
                     <div class="countdown-heading">
                         <h2 id="countdownTitle">距离开场还有</h2>
                         <span class="event-status" id="eventStatus" role="status">准备启航</span>
                     </div>
-                    <div class="timer-grid" role="timer" aria-labelledby="countdownTitle" aria-live="off">
+                    <div class="timer-grid" id="timerGrid" role="timer" aria-labelledby="countdownTitle" aria-live="off">
                         <div class="time-box"><span class="time-value" id="days">000</span><span class="time-label">天</span></div>
                         <span class="time-separator" aria-hidden="true">:</span>
                         <div class="time-box"><span class="time-value" id="hours">00</span><span class="time-label">时</span></div>
@@ -61,12 +66,17 @@
                         <a class="official-link" href="https://bw.bilibili.com/#/" target="_blank" rel="noopener noreferrer">前往官网<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg><span class="sr-only">（在新标签页打开）</span></a>
                     </div>
                 </div>
+                <div class="unavailable-panel" id="unavailablePanel" hidden>
+                    <h2 id="unavailableTitle">这个年份暂未收录</h2>
+                    <p id="unavailableMessage">请选择已收录年份，查看对应主视觉与活动时光。</p>
+                    <a class="official-link" href="?year=2026" id="returnLink">查看 BW 2026</a>
+                </div>
             </section>
-            <noscript><p class="noscript-note">启用 JavaScript 后可查看实时计时。活动日期：2026 年 7 月 10 日至 12 日。</p></noscript>
+            <noscript><p class="noscript-note">启用 JavaScript 后可按年份查看背景与实时计时。默认 BW 2026：7 月 10 日至 12 日。</p></noscript>
         </main>
         <footer class="site-footer">
             <p>热爱不散场，次元再相逢。</p>
-            <p>非官方页面 · 视觉素材来自 BW 官网<span class="credit">制作鸣谢：lrastar / Gemini3 Pro / 360NENZ / Codex（gpt-6.1-sol）</span></p>
+            <p>非官方页面 · <a href="assets/sources.json" target="_blank" rel="noopener noreferrer">BW 官网素材与归档来源</a><span class="credit">制作鸣谢：lrastar / Gemini3 Pro / 360NENZ / Codex（gpt-6.1-sol）</span></p>
         </footer>
     </div>
     <dialog class="farewell-dialog" id="farewellDialog" aria-labelledby="farewellTitle" aria-describedby="farewellMessage">
@@ -79,8 +89,8 @@
             </div>
             <p class="farewell-signature">From：BW 小园长</p>
             <div class="farewell-note">
-                <p><strong>BW 2026 的旅程暂告一段落，</strong>这里继续记录我们与 BW 的时光。</p>
-                <p>非官方纪念页面 · 愿热爱常在</p>
+                <p id="farewellContext"><strong>BW 2026 的旅程暂告一段落，</strong>这里继续记录我们与 BW 的时光。</p>
+                <p id="farewellOrigin">非官方纪念页面 · 愿热爱常在</p>
             </div>
             <form method="dialog" class="farewell-actions"><button class="farewell-confirm" autofocus>好的，收到</button></form>
         </div>
