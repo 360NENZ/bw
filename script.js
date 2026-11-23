@@ -1,17 +1,38 @@
 // 使用明确的北京时间，避免访问者所在时区改变活动时刻。
-const EVENT_START = new Date('2026-07-10T00:00:00+08:00').getTime();
+const EVENT_START = new Date('2026-07-10T08:00:00+08:00').getTime();
+const EVENT_END = new Date('2026-07-12T18:00:00+08:00').getTime();
+const OPENING_HOUR = 8;
+const CLOSING_HOUR = 18;
 const timeFields = ['days', 'hours', 'minutes', 'seconds'].map(id => document.getElementById(id));
 const countdownTitle = document.getElementById('countdownTitle');
 const eventStatus = document.getElementById('eventStatus');
 const countdownNote = document.getElementById('countdownNote');
+let lastState;
 
 function updateCountdown(now = Date.now()) {
-    const totalSeconds = Math.floor(Math.max(0, EVENT_START - now) / 1000);
+    const phase = now < EVENT_START ? 'upcoming' : now < EVENT_END ? 'ongoing' : 'ended';
+    const duration = phase === 'upcoming' ? EVENT_START - now : now - (phase === 'ongoing' ? EVENT_START : EVENT_END);
+    const totalSeconds = Math.floor(Math.max(0, duration) / 1000);
     const values = [Math.floor(totalSeconds / 86400), Math.floor(totalSeconds / 3600) % 24, Math.floor(totalSeconds / 60) % 60, totalSeconds % 60];
     timeFields.forEach((field, index) => {
         const value = String(values[index]).padStart(index === 0 ? 3 : 2, '0');
         if (field.textContent !== value) field.textContent = value;
     });
+    const beijingHour = new Date(now + 8 * 3600000).getUTCHours();
+    const openingStatus = beijingHour < OPENING_HOUR ? '今日尚未开馆' : beijingHour < CLOSING_HOUR ? '现场开放中' : '今日已闭馆';
+    const state = phase === 'ongoing' ? `${phase}:${openingStatus}` : phase;
+    if (state !== lastState) {
+        const copy = {
+            upcoming: ['距 BW 2026 开场还有', '准备启航', '下一站，与你在现场相见。'],
+            ongoing: ['BW 2026 已开场', openingStatus, beijingHour >= OPENING_HOUR && beijingHour < CLOSING_HOUR ? '相遇正在发生，尽情享受这场夏日的梦。' : '每日 08:00–18:00 开放，期待与你在现场相见。'],
+            ended: ['距 BW 2026 落幕已经', '期待再会', '旅途虽已到站，热爱仍在继续。']
+        }[phase];
+        countdownTitle.textContent = copy[0];
+        eventStatus.textContent = copy[1];
+        countdownNote.textContent = copy[2];
+        document.getElementById('countdown').dataset.phase = phase;
+        lastState = state;
+    }
 }
 updateCountdown();
 setInterval(() => updateCountdown(), 1000);
@@ -83,3 +104,12 @@ document.addEventListener('fullscreenchange', () => {
     fullscreenBtn.setAttribute('aria-label', label);
     fullscreenBtn.title = label;
 });
+
+// 每次打开页面都展示寄语，不使用持久化标记跳过。
+const farewellDialog = document.getElementById('farewellDialog');
+if (typeof farewellDialog.showModal === 'function') {
+    farewellDialog.showModal();
+    farewellDialog.addEventListener('close', () => {
+        document.getElementById('countdown').focus({ preventScroll: true });
+    });
+}

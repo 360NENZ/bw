@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1549b8">
-    <meta name="description" content="Bilibili World 2026 非官方倒计时。次元新航线，和热爱一起出发。">
+    <meta name="description" content="Bilibili World 2026 非官方纪念页面。开场倒计时、活动时光与落幕正计时，热爱不散场。">
     <title>Bilibili World 2026 · 次元新航线</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="preload" href="assets/bw-2026-poster.jpg" as="image">
@@ -19,7 +19,7 @@
     </div>
     <div class="page-shell">
         <header class="site-header">
-            <a class="site-brand" href="./" aria-label="BW 2026 倒计时首页">
+            <a class="site-brand" href="./" aria-label="BW 2026 纪念页面首页">
                 <span class="brand-mark">BW<span>2026</span></span>
                 <span class="brand-caption">次元新航线<span>非官方纪念页面</span></span>
             </a>
@@ -40,6 +40,7 @@
                     <h1 id="eventTitle">Bilibili World <span>2026</span></h1>
                     <p class="event-location"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>上海 · 国家会展中心</p>
                     <p class="event-date"><time datetime="2026-07-10">2026.07.10</time><span>—</span><time datetime="2026-07-12">07.12</time><span class="timezone">北京时间</span></p>
+                    <p class="opening-hours">每日 08:00–18:00</p>
                 </div>
                 <div class="countdown-panel">
                     <div class="countdown-heading">
@@ -68,6 +69,22 @@
             <p>非官方页面 · 视觉素材来自 BW 官网<span class="credit">制作鸣谢：lrastar / Gemini3 Pro</span></p>
         </footer>
     </div>
+    <dialog class="farewell-dialog" id="farewellDialog" aria-labelledby="farewellTitle" aria-describedby="farewellMessage">
+        <div class="farewell-content">
+            <p class="farewell-badge">哔哩哔哩 · BilibiliWorld 2026</p>
+            <h2 id="farewellTitle">你好呀，今天在 BW 玩得开心吗？</h2>
+            <div class="farewell-message" id="farewellMessage">
+                <p>谢谢你们因为热爱从世界各地奔赴于此——是你们的到来，让 BW 的每一秒更充满意义。旅途虽已达终点，但请相信，在现实世界的你，也会拥有着无限的勇气和力量。</p>
+                <p>谢谢你，愿意来到这里和我们做同一场梦。</p>
+            </div>
+            <p class="farewell-signature">From：BW 小园长</p>
+            <div class="farewell-note">
+                <p><strong>BW 2026 的旅程暂告一段落，</strong>这里继续记录我们与 BW 的时光。</p>
+                <p>非官方纪念页面 · 愿热爱常在</p>
+            </div>
+            <form method="dialog" class="farewell-actions"><button class="farewell-confirm" autofocus>好的，收到</button></form>
+        </div>
+    </dialog>
     <p class="feedback" id="feedback" role="status" hidden></p>
 </body>
 </html>
