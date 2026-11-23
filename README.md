@@ -6,6 +6,8 @@
 
 在项目目录运行 `python -m http.server 8080`，访问 `http://localhost:8080`。也可直接打开 `index.html`。
 
+开放时间提示默认隐藏；链接添加 `?showHours=1` 时展示，例如 <http://localhost:8080/?showHours=1>。已有其他参数时添加 `&showHours=1`，参数应放在 `#` 之前。该参数只控制提示文字，计时边界始终按每日 08:00–18:00 设置。
+
 ## 背景素材
 
 2026-11-23 从 <https://bw.bilibili.com/#/> 的首页主 banner 获取，保存到本地避免跨站防盗链影响显示。素材版权归原权利方所有。
@@ -39,4 +41,4 @@
 
 运行 `node --test tests/countdown.test.cjs` 验证北京时间开场、每日开闭馆、最终落幕边界及长期正计时。
 
-原页面制作鸣谢：lrastar / Gemini3 Pro。
+制作鸣谢：lrastar / Gemini3 Pro / 360NENZ / Codex（gpt-6.1-sol）。

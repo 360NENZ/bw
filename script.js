@@ -7,6 +7,8 @@ const timeFields = ['days', 'hours', 'minutes', 'seconds'].map(id => document.ge
 const countdownTitle = document.getElementById('countdownTitle');
 const eventStatus = document.getElementById('eventStatus');
 const countdownNote = document.getElementById('countdownNote');
+const showOpeningHours = new URLSearchParams(location.search).get('showHours') === '1';
+document.getElementById('openingHours').hidden = !showOpeningHours;
 let lastState;
 
 function updateCountdown(now = Date.now()) {
@@ -24,7 +26,7 @@ function updateCountdown(now = Date.now()) {
     if (state !== lastState) {
         const copy = {
             upcoming: ['距 BW 2026 开场还有', '准备启航', '下一站，与你在现场相见。'],
-            ongoing: ['BW 2026 已开场', openingStatus, beijingHour >= OPENING_HOUR && beijingHour < CLOSING_HOUR ? '相遇正在发生，尽情享受这场夏日的梦。' : '每日 08:00–18:00 开放，期待与你在现场相见。'],
+            ongoing: ['BW 2026 已开场', openingStatus, beijingHour >= OPENING_HOUR && beijingHour < CLOSING_HOUR ? '相遇正在发生，尽情享受这场夏日的梦。' : `${showOpeningHours ? '每日 08:00–18:00 开放，' : ''}期待与你在现场相见。`],
             ended: ['距 BW 2026 落幕已经', '期待再会', '旅途虽已到站，热爱仍在继续。']
         }[phase];
         countdownTitle.textContent = copy[0];

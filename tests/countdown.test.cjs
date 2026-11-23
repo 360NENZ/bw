@@ -9,7 +9,7 @@ function loadClock() {
         if (!elements.has(id)) elements.set(id, { textContent: '', dataset: {} });
         return elements.get(id);
     };
-    const context = vm.createContext({ document: { getElementById }, Date });
+    const context = vm.createContext({ document: { getElementById }, Date, URLSearchParams, location: { search: '' } });
     const source = fs.readFileSync(require('node:path').join(__dirname, '../script.js'), 'utf8');
     vm.runInContext(source.split('updateCountdown();')[0], context);
     return now => {
