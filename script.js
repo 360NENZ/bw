@@ -11,6 +11,13 @@ const showOpeningHours = new URLSearchParams(location.search).get('showHours') =
 document.getElementById('openingHours').hidden = !showOpeningHours;
 let lastState;
 
+function shouldShowFarewell(now = Date.now()) {
+    if (now < EVENT_START) return false;
+    if (now >= EVENT_END) return true;
+    const beijingHour = new Date(now + 8 * 3600000).getUTCHours();
+    return beijingHour >= CLOSING_HOUR || beijingHour < OPENING_HOUR;
+}
+
 function updateCountdown(now = Date.now()) {
     const phase = now < EVENT_START ? 'upcoming' : now < EVENT_END ? 'ongoing' : 'ended';
     const duration = phase === 'upcoming' ? EVENT_START - now : now - (phase === 'ongoing' ? EVENT_START : EVENT_END);
@@ -107,9 +114,9 @@ document.addEventListener('fullscreenchange', () => {
     fullscreenBtn.title = label;
 });
 
-// 每次打开页面都展示寄语，不使用持久化标记跳过。
+// 打开页面时仅在每日闭馆后或整届落幕后展示，不使用持久化标记跳过。
 const farewellDialog = document.getElementById('farewellDialog');
-if (typeof farewellDialog.showModal === 'function') {
+if (shouldShowFarewell() && typeof farewellDialog.showModal === 'function') {
     farewellDialog.showModal();
     farewellDialog.addEventListener('close', () => {
         document.getElementById('countdown').focus({ preventScroll: true });

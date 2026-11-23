@@ -46,3 +46,30 @@ test('时间基准不受访问者时区影响，长期正计时天数不截断',
     assert.deepEqual(clock('2026-07-10T00:00:00Z'), clock('2026-07-10T08:00:00+08:00'));
     assert.deepEqual(clock('2030-01-01T00:00:00+08:00').values, ['1268','06','00','00']);
 });
+
+test('寄语仅在每日闭馆后及整届落幕后展示，按北京时间判断', () => {
+    const source = fs.readFileSync(require('node:path').join(__dirname, '../script.js'), 'utf8');
+    const context = vm.createContext({ document: { getElementById: () => ({}) }, Date, URLSearchParams, location: { search: '' } });
+    vm.runInContext(source.split('updateCountdown();')[0], context);
+    const cases = [
+        ['2026-07-09T20:00:00+08:00', false],
+        ['2026-07-10T07:59:59+08:00', false],
+        ['2026-07-10T08:00:00+08:00', false],
+        ['2026-07-10T17:59:59+08:00', false],
+        ['2026-07-10T18:00:00+08:00', true],
+        ['2026-07-11T00:00:00+08:00', true],
+        ['2026-07-11T07:59:59+08:00', true],
+        ['2026-07-11T08:00:00+08:00', false],
+        ['2026-07-11T18:00:00+08:00', true],
+        ['2026-07-12T07:59:59+08:00', true],
+        ['2026-07-12T08:00:00+08:00', false],
+        ['2026-07-12T17:59:59+08:00', false],
+        ['2026-07-12T18:00:00+08:00', true],
+        ['2026-07-13T08:00:00+08:00', true],
+        ['2026-11-23T12:00:00+08:00', true],
+        ['2026-07-10T10:00:00Z', true]
+    ];
+    for (const [time, expected] of cases) {
+        assert.equal(vm.runInContext(`shouldShowFarewell(${new Date(time).getTime()})`, context), expected, time);
+    }
+});
