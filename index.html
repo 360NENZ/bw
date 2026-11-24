@@ -10,9 +10,9 @@
     <link id="touchIcon" rel="apple-touch-icon" href="assets/bw-icon.png?v=20261124-year-icons">
     <link rel="preload" href="assets/fonts/bw-sans.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/fonts/bw-numbers.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="style.css?v=20261124-responsive-kv">
-    <script src="events.js?v=20261124-responsive-kv" defer></script>
-    <script src="script.js?v=20261124-responsive-kv" defer></script>
+    <link rel="stylesheet" href="style.css?v=20261124-year-states">
+    <script src="events.js?v=20261124-year-states" defer></script>
+    <script src="script.js?v=20261124-year-states" defer></script>
 </head>
 <body>
     <a class="skip-link" href="#countdown">跳转到活动信息</a>
@@ -82,9 +82,11 @@
                     <div class="history-sources"><a id="announcementSource" target="_blank" rel="noopener noreferrer">延期公告转载</a><a id="statusSource" target="_blank" rel="noopener noreferrer">未举办记录</a><a class="official-link" id="nextEventLink">回望 BW 2023 →</a></div>
                 </div>
                 <div class="unavailable-panel" id="unavailablePanel" hidden>
+                    <span class="event-status" id="yearStateLabel" hidden>时间待定</span>
                     <h2 id="unavailableTitle">这个年份暂未收录</h2>
                     <p id="unavailableMessage">请选择其他年份，继续回望与 BW 的时光。</p>
                     <a class="official-link" href="?year=2026" id="returnLink">查看 BW 2026</a>
+                    <a class="official-link" id="pendingOfficialLink" href="https://bw.bilibili.com/" target="_blank" rel="noopener noreferrer" hidden>关注官方消息<span class="sr-only">（在新标签页打开）</span></a>
                 </div>
             </section>
             <noscript><p class="noscript-note">启用 JavaScript 后可按年份查看背景与实时计时。默认 BW 2026：7 月 10 日至 12 日。</p></noscript>

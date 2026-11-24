@@ -73,7 +73,7 @@
         })
     });
 
-    function resolveYear(search = '') {
+    function resolveYear(search = '', now = Date.now()) {
         const params = new URLSearchParams(search);
         const parameter = params.get('year');
         const year = parameter === null ? '2026' : parameter;
@@ -81,10 +81,14 @@
         const defaultEvent = valid ? events[year] || null : null;
         const station = params.get('station');
         const invalidStation = Boolean(defaultEvent && station !== null && !Object.hasOwn(stations[year] || {}, station));
+        const firstRecordedYear = records[0][0];
+        const thisYear = new Date(now + 8 * 3600000).getUTCFullYear();
+        const state = !valid ? 'invalid-year' : invalidStation ? 'invalid-station' : defaultEvent ? defaultEvent.status
+            : Number(year) < firstRecordedYear ? 'before-records' : Number(year) > thisYear ? 'schedule-pending' : 'missing';
         return {
             year: valid ? year : null,
             event: invalidStation ? null : station !== null && defaultEvent ? stations[year][station] : defaultEvent,
-            invalid: !valid, invalidStation
+            invalid: !valid, invalidStation, state
         };
     }
 

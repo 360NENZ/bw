@@ -24,6 +24,28 @@ test('默认 2026，年份独立解析；未收录与错误参数不借用其他
     assert.equal(shouldShowFarewell(null), false);
 });
 
+test('区分2018记录起点前、未来待定年份和待补齐资料，不虚构时间', () => {
+    const now = time('2026-11-24T12:00:00+08:00');
+    for (const year of ['0000', '1999', '2017']) {
+        const selection = resolveYear(`?year=${year}`, now);
+        assert.equal(selection.state, 'before-records');
+        assert.equal(selection.event, null);
+    }
+    for (const year of ['2027', '2030', '9999']) {
+        const selection = resolveYear(`?year=${year}&showHours=1`, now);
+        assert.equal(selection.state, 'schedule-pending');
+        assert.equal(selection.event, null);
+        assert.equal(getClock(selection.event, now), null);
+        assert.equal(shouldShowFarewell(selection.event, now), false);
+    }
+    assert.equal(resolveYear('?year=2018', now).state, 'held');
+    assert.equal(resolveYear('?year=2022', now).state, 'not-held');
+    assert.equal(resolveYear('?year=abc', now).state, 'invalid-year');
+    assert.equal(resolveYear('?year=2021&station=shanghai', now).state, 'invalid-station');
+    assert.equal(resolveYear('?year=2027', time('2026-12-31T15:59:59Z')).state, 'schedule-pending');
+    assert.equal(resolveYear('?year=2027', time('2026-12-31T16:00:00Z')).state, 'missing');
+});
+
 test('2026 开场前一秒倒计时，08:00 开场起连续记录', () => {
     assert.equal(getClock(events[2026], time('2026-07-10T07:59:59+08:00')).phase, 'upcoming');
     assert.deepEqual(getClock(events[2026], time('2026-07-10T07:59:59+08:00')).values, [0, 0, 0, 1]);

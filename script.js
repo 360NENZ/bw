@@ -54,7 +54,9 @@ function yearUrl(year) {
     url.hash = '';
     return url.href;
 }
-Object.values(BWEvents.events).reverse().forEach(event => {
+const menuEvents = Object.values(BWEvents.events);
+if (selection.state === 'schedule-pending') menuEvents.push({ year: Number(selection.year), status: 'schedule-pending' });
+menuEvents.sort((a, b) => b.year - a.year).forEach(event => {
     const link = document.createElement('a');
     link.href = yearUrl(event.year);
     link.textContent = String(event.year);
@@ -65,7 +67,13 @@ Object.values(BWEvents.events).reverse().forEach(event => {
         status.textContent = '未举办';
         link.append(status);
     }
-    if (event.year === currentEvent?.year) link.setAttribute('aria-current', 'page');
+    if (event.status === 'schedule-pending') {
+        const status = document.createElement('span');
+        status.className = 'year-status';
+        status.textContent = '待定';
+        link.append(status);
+    }
+    if (String(event.year) === selection.year) link.setAttribute('aria-current', 'page');
     element('yearLinks').append(link);
 });
 element('returnLink').href = yearUrl(2026);
@@ -117,15 +125,33 @@ if (currentEvent) {
         element('nextEventLink').href = yearUrl(2023);
     }
 } else {
-    document.title = selection.invalid ? 'BW · 年份参数无效' : selection.invalidStation ? `BW ${selection.year} · 站点参数无效` : `BW ${selection.year} · 暂未收录`;
-    element('themeName').textContent = '回望历年 BW';
+    const messages = {
+        'invalid-year': ['BW · 年份参数无效', '年份参数需要四位数字', '例如在链接中使用 ?year=2025。也可以从右上角选择已收录年份。', '回望历年 BW'],
+        'invalid-station': [`BW ${selection.year} · 站点参数无效`, '这个年份没有该站点', '请选择活动站点，或从「历年」菜单重新选择年份。', '回望历年 BW'],
+        'before-records': [`BW ${selection.year} · 回顾起点之前`, '这段时光，尚未启航', '这里的 BW 年度记录从 2018 年开始。请选择 2018 年或之后的年份，回望与热爱的每一次相聚。', '故事，从相遇开始'],
+        'schedule-pending': [`Bilibili World ${selection.year} · 时间待定`, '下一次相遇，时间待定', `BW ${selection.year} 的活动日期与场地待定。新的相遇坐标，等待与你一起揭晓。`, '下一次相遇，敬请期待'],
+        missing: [`BW ${selection.year} · 资料待补齐`, '这段回忆，仍在整理中', '该年份的活动资料正在补齐，先一起回望其他年份的相遇吧。', '回望历年 BW']
+    };
+    const [title, heading, message, theme] = messages[selection.state];
+    document.title = title;
+    element('themeName').textContent = theme;
     element('eventLocation').hidden = true;
     element('eventDate').hidden = true;
     element('countdownPanel').hidden = true;
     element('unavailablePanel').hidden = false;
-    element('countdown').dataset.phase = 'unavailable';
-    element('unavailableTitle').textContent = selection.invalid ? '年份参数需要四位数字' : selection.invalidStation ? '这个年份没有该站点' : `BW ${selection.year} 暂未收录`;
-    element('unavailableMessage').textContent = selection.invalid ? '例如在链接中使用 ?year=2025。也可以从右上角选择已收录年份。' : selection.invalidStation ? '请选择活动站点，或从「历年」菜单重新选择年份。' : '请选择其他年份，继续回望与 BW 的时光。';
+    element('countdown').dataset.phase = selection.state;
+    document.documentElement.dataset.eventStatus = selection.state;
+    element('unavailableTitle').textContent = heading;
+    element('unavailableMessage').textContent = message;
+    if (selection.state === 'before-records') {
+        element('returnLink').href = yearUrl(2018);
+        element('returnLink').textContent = '从 BW 2018 开始 →';
+    }
+    if (selection.state === 'schedule-pending') {
+        element('returnLink').textContent = '回望 BW 2026';
+        element('pendingOfficialLink').hidden = false;
+        element('yearStateLabel').hidden = false;
+    }
 }
 
 document.addEventListener('click', event => {
