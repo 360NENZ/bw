@@ -6,9 +6,26 @@
     "page": "https://bw.bilibili.com/2026/",
     "retrieved": "2026-11-24",
     "assets": [
-      {"file": "assets/bw-logo.svg", "source": "https://activity.hdslb.com/blackboard/activity3ERAcwloghvz2600/js/app.defcc795.js", "method": "extracted-official-svg", "evidence": "官网 HTML 引用该应用，内含 logo-bw.svg / icon-logo-bw。将原 symbol 包装改为独立 svg，保留全部路径、填色和 viewBox。", "sha256": "36077aa8485072b7c2cef25b9aafd41d6b657d4b3f1e1829db8275279fbfc9c3"},
-      {"file": "assets/favicon.ico", "source": "https://i0.hdslb.com/bfs/activity-plat/static/20240529/4920177e4bf9eb2b0fd8dacba0e5dbf8/QsiGporZk4.ico", "method": "live-cdn", "evidence": "官网 HTML 的 rel=icon 使用粉色小电视星球图标。保留原始 ICO。", "sha256": "297918d59ca7ca4d10acfbe4642282cf5a18b8d66e182284c71a41f023203468"},
-      {"file": "assets/bw-icon.png", "source": "assets/favicon.ico", "method": "icon-format-conversion", "derivation": "从原 ICO 提取 128×128 PNG，供 apple-touch-icon 使用，保留透明背景。"}
+      {
+        "file": "assets/bw-logo.svg",
+        "source": "https://activity.hdslb.com/blackboard/activity3ERAcwloghvz2600/js/app.defcc795.js",
+        "method": "extracted-official-svg",
+        "evidence": "官网 HTML 引用该应用，内含 logo-bw.svg / icon-logo-bw。将原 symbol 包装改为独立 svg，保留全部路径、填色和 viewBox。",
+        "sha256": "36077aa8485072b7c2cef25b9aafd41d6b657d4b3f1e1829db8275279fbfc9c3"
+      },
+      {
+        "file": "assets/favicon.ico",
+        "source": "https://i0.hdslb.com/bfs/activity-plat/static/20240529/4920177e4bf9eb2b0fd8dacba0e5dbf8/QsiGporZk4.ico",
+        "method": "live-cdn",
+        "evidence": "官网 HTML 的 rel=icon 使用粉色小电视星球图标。保留原始 ICO。",
+        "sha256": "297918d59ca7ca4d10acfbe4642282cf5a18b8d66e182284c71a41f023203468"
+      },
+      {
+        "file": "assets/bw-icon.png",
+        "source": "assets/favicon.ico",
+        "method": "icon-format-conversion",
+        "derivation": "从原 ICO 提取 128×128 PNG，供 apple-touch-icon 使用，保留透明背景。"
+      }
     ]
   },
   "archiveSelection": "候选跨年度检索，参考当年活动前约一个月至下一届活动前约一个月的页面保留区间；最终依据页面标题、海报年份、活动日期与应用内容确定届数，不按抓取年份直接归类。",
@@ -16,55 +33,118 @@
     {
       "year": 2018,
       "archivePage": "https://web.archive.org/web/20180624210050id_/https://bw.bilibili.com/2018/",
-      "dates": ["2018-07-20", "2018-07-22"],
+      "dates": [
+        "2018-07-20",
+        "2018-07-22"
+      ],
       "venue": "上海 · 世博展览馆",
       "dateEvidence": "归档首页显示 07.20–22；归档应用场地信息为上海世博展览馆。",
       "coverage": "首页 3D 场景与欢迎层静帧，保留画面中的标志、日期和 START 字样。",
-      "assets": [{"file": "assets/bw-2018-poster.jpg", "method": "rendered-archive-page-with-live-cdn", "source": "https://bw.bilibili.com/2018/", "derivation": "使用归档 HTML、JS、CSS，原 CDN 加载 Babylon 模型和纹理；1920×1080 首页截图转 JPEG。", "modelRoot": "https://activity.hdslb.com/blackboard/activity9008/"}]
+      "assets": [
+        {
+          "file": "assets/bw-2018-poster.jpg",
+          "method": "rendered-archive-page-with-live-cdn",
+          "source": "https://bw.bilibili.com/2018/",
+          "derivation": "使用归档 HTML、JS、CSS，原 CDN 加载 Babylon 模型和纹理；1920×1080 首页截图转 JPEG。",
+          "modelRoot": "https://activity.hdslb.com/blackboard/activity9008/"
+        }
+      ]
     },
     {
       "year": 2019,
       "archivePage": "https://web.archive.org/web/20190610214652id_/https://bw.bilibili.com/2019/index.html",
-      "dates": ["2019-08-16", "2019-08-18"],
+      "dates": [
+        "2019-08-16",
+        "2019-08-18"
+      ],
       "venue": "广州 · 保利世贸博览馆",
       "dateEvidence": "归档 bundle.1001b419e96aa1644f8a.js 的 guangzhou 配置为 stime:8.16、etime:8.18、addr:保利世贸博览馆。上海站 10.4–6，成都站 12.21–22；本页选择广州站。",
       "coverage": "广州站首页循环视频及静帧。",
       "assets": [
-        {"file": "assets/bw-2019-banner.mp4", "method": "live-cdn", "source": "https://activity.hdslb.com/blackboard/static/47c73a6b39d6f0d43a56e85b73248837/bg.mp4", "evidence": "归档 HTML 对应 build.1.e23e087e58500ccb6ea1.js（归档缺失，原 CDN 补取）resizeVideo.guangzhou.src。"},
-        {"file": "assets/bw-2019-poster.jpg", "method": "video-frame", "source": "assets/bw-2019-banner.mp4", "derivation": "ffmpeg 在 1 秒处提取 JPEG。"}
+        {
+          "file": "assets/bw-2019-banner.mp4",
+          "method": "live-cdn",
+          "source": "https://activity.hdslb.com/blackboard/static/47c73a6b39d6f0d43a56e85b73248837/bg.mp4",
+          "evidence": "归档 HTML 对应 build.1.e23e087e58500ccb6ea1.js（归档缺失，原 CDN 补取）resizeVideo.guangzhou.src。"
+        },
+        {
+          "file": "assets/bw-2019-poster.jpg",
+          "method": "video-frame",
+          "source": "assets/bw-2019-banner.mp4",
+          "derivation": "ffmpeg 在 1 秒处提取 JPEG。"
+        }
       ]
     },
     {
       "year": 2020,
       "archivePage": "https://web.archive.org/web/20200605151220id_/https://bw.bilibili.com/2020/index.html",
-      "dates": ["2020-08-07", "2020-08-09"],
+      "dates": [
+        "2020-08-07",
+        "2020-08-09"
+      ],
       "venue": "上海 · 国家会展中心",
       "dateEvidence": "归档应用和页面显示 2020 年 08 月 07 日至 08 月 09 日，上海国家会展中心。",
-      "coverage": "首页漫画循环视频与静帧。",
+      "coverage": "官网背景动画，去除原片尾退场后只播放一遍，停留在清晰的最后一帧；本地海报同步取自最后一帧。",
       "assets": [
-        {"file": "assets/bw-2020-banner.mp4", "method": "wayback", "source": "https://activity.hdslb.com/blackboard/static/20200529/b8f2b74d0482aed61472c7065dc1ed56/N5PUV3mB~.mp4", "archive": "https://web.archive.org/web/20200607080038id_/https://activity.hdslb.com/blackboard/static/20200529/b8f2b74d0482aed61472c7065dc1ed56/N5PUV3mB~.mp4"},
-        {"file": "assets/bw-2020-poster.jpg", "method": "video-frame", "source": "assets/bw-2020-banner.mp4", "derivation": "ffmpeg 在 5 秒处提取 JPEG。"}
+        {
+          "file": "assets/bw-2020-banner.mp4",
+          "method": "wayback",
+          "source": "https://activity.hdslb.com/blackboard/static/20200529/b8f2b74d0482aed61472c7065dc1ed56/N5PUV3mB~.mp4",
+          "archive": "https://web.archive.org/web/20200607080038id_/https://activity.hdslb.com/blackboard/static/20200529/b8f2b74d0482aed61472c7065dc1ed56/N5PUV3mB~.mp4",
+          "derivation": "保留原视频前 10.4 秒，以 H.264 CRF 18 重新编码，去除最后的白色淡出。",
+          "seconds": 10.4,
+          "bytes": 13243230,
+          "sha256": "265907f7a050e124b6dbd248d20ed141b4204bc39ba5d78e35ee4972a4f67d47"
+        },
+        {
+          "file": "assets/bw-2020-poster.jpg",
+          "method": "video-frame",
+          "source": "assets/bw-2020-banner.mp4",
+          "derivation": "ffmpeg 提取处理后视频的最后一帧 JPEG，与播放结束画面一致。"
+        }
       ]
     },
     {
       "year": 2021,
       "archivePage": "https://web.archive.org/web/20210607074947id_/https://bw.bilibili.com/2021/index.html",
-      "dates": ["2021-07-09", "2021-07-11"],
+      "dates": [
+        "2021-07-09",
+        "2021-07-11"
+      ],
       "venue": "上海 · 国家会展中心",
       "dateEvidence": "归档 index.5c6dde78.css 的 .header .time 内嵌图片显示 上海·国家会展中心 2021.7.9（五）–7.11（日）。",
       "currentPage": "https://bw.bilibili.com/2021/index.html#/Home",
       "currentPageVerified": "2026-11-24：页面返回 200，标题 BW2021，全员宝藏，速速递上！；当前 index.dbea7288.js 及浏览器 video DOM 确认加载动画与归档应用指向同一视频。",
-      "coverage": "官网加载背景动画完整视频与 2 秒处静帧，取代先前的角色层局部复原。保留原动画内容，播放一遍后停止；原视频结尾淡出，因此结束后展示 2 秒处完整主图，可手动重播。",
+      "coverage": "官网背景动画，去除原片尾退场后只播放一遍，停留在清晰的最后一帧；本地海报同步取自最后一帧。",
       "assets": [
-        {"file": "assets/bw-2021-banner.mp4", "method": "live-cdn", "source": "https://activity.hdslb.com/blackboard/static/20210601/6722eca0e7e896d265f956d00ca4ff06/nMuVYG1vNF.mp4", "width": 1920, "height": 1080, "seconds": 4, "bytes": 2530918, "sha256": "baf58a9ae9dc1c8cdb1b0a227957d733499e25d423e7b09289a3ebfa3d26c047"},
-        {"file": "assets/bw-2021-poster.jpg", "method": "video-frame", "source": "assets/bw-2021-banner.mp4", "derivation": "ffmpeg 在 2 秒处提取完整 JPEG。"}
+        {
+          "file": "assets/bw-2021-banner.mp4",
+          "method": "live-cdn",
+          "source": "https://activity.hdslb.com/blackboard/static/20210601/6722eca0e7e896d265f956d00ca4ff06/nMuVYG1vNF.mp4",
+          "width": 1920,
+          "height": 1080,
+          "seconds": 2,
+          "bytes": 2641657,
+          "originalSha256": "baf58a9ae9dc1c8cdb1b0a227957d733499e25d423e7b09289a3ebfa3d26c047",
+          "derivation": "保留原视频前 2 秒，以 H.264 CRF 18 重新编码，去除加载进度层与模糊变暗退场。",
+          "sha256": "4d34cdffcd50f54f28595ee855d34b7fbab170666dd3210b124752b9a7175290"
+        },
+        {
+          "file": "assets/bw-2021-poster.jpg",
+          "method": "video-frame",
+          "source": "assets/bw-2021-banner.mp4",
+          "derivation": "ffmpeg 提取处理后视频的最后一帧 JPEG，与播放结束画面一致。"
+        }
       ]
     },
     {
       "year": 2022,
       "status": "not-held",
       "dates": null,
-      "plannedDates": ["2022-07-15", "2022-07-17"],
+      "plannedDates": [
+        "2022-07-15",
+        "2022-07-17"
+      ],
       "announcementDate": "2022-05-23",
       "announcementPage": "https://www.onsiteclub.com/case/BW2022-Announced-Delay-Or-That-2022-5-24",
       "dateEvidence": "ONSITECLUB 于 2022-05-24 转载 BilibiliWorld 园长微博截图和完整官方延期公告。公告落款为 BilibiliWorld 项目组、2022 年 5 月 23 日，正文明确原定 7 月 15–17 日，并说明疫情防控、疫情反弹风险与观众健康安全。转载日期不作为公告日期。",
@@ -72,52 +152,116 @@
       "statusReference": "https://baike.baidu.com/en/item/BiliBili%20World/1469626",
       "nextEventPage": "https://www.bilibili.com/blackboard/bw/2023/index.html",
       "coverage": "保存完整官方延期公告（第三方转载），供页面查看。未找到可验证的 2022 独立主 banner；页面背景仅参考公告的蓝色条纹配色，以 CSS 绘制，不使用其他年份主图。",
-      "assets": [{"file": "assets/bw-2022-announcement.jpg", "method": "reposted-official-announcement", "source": "https://res.onsiteclub.com/169fd7b9e98948cfba08681962d3d259.jpg", "evidence": "转载页第二张正文图片，与园长微博截图中的公告一致；保留全文、署名和落款，未裁剪。", "width": 1080, "height": 3399, "sha256": "665c7aef3e8a731cc5654038cf3ef273f4e88589d8b42ce586e2c19d6770e22a"}]
+      "assets": [
+        {
+          "file": "assets/bw-2022-announcement.jpg",
+          "method": "reposted-official-announcement",
+          "source": "https://res.onsiteclub.com/169fd7b9e98948cfba08681962d3d259.jpg",
+          "evidence": "转载页第二张正文图片，与园长微博截图中的公告一致；保留全文、署名和落款，未裁剪。",
+          "width": 1080,
+          "height": 3399,
+          "sha256": "665c7aef3e8a731cc5654038cf3ef273f4e88589d8b42ce586e2c19d6770e22a"
+        }
+      ]
     },
     {
       "year": 2023,
       "archivePage": "https://web.archive.org/web/20230702082419id_/https://bw.bilibili.com/",
-      "dates": ["2023-07-21", "2023-07-23"],
+      "dates": [
+        "2023-07-21",
+        "2023-07-23"
+      ],
       "venue": "上海 · 国家会展中心",
       "dateEvidence": "归档 CSS 引用 info.98e11060.png；原 CDN 图片显示 上海 / 2023.7.21–23 国家会展中心。",
       "currentPage": "https://www.bilibili.com/blackboard/bw/2023/index.html",
       "referencePromotionPage": "https://web.archive.org/web/20230401181517/https://bw.bilibili.com/",
       "coverage": "官网 loadingKv 配置引用的完整 3000×1688 横版主视觉原图，不含招商信息、联系方式或往期回顾按钮，未经裁剪或重新拼接。与宣传 PV 封面及 4 月招商页背景使用同一套人物主视觉。",
-      "referenceVideo": {"url": "https://www.bilibili.com/video/BV1i14y1m7DA", "title": "BilibiliWorld 2023 宣传PV", "cover": "https://i0.hdslb.com/bfs/archive/51c859441eb9f1dff9cb45fbc85178c90f159123.jpg", "evidence": "2026-11-24：公开视频信息接口返回该标题与封面；已核对招商背景和封面的人物及主视觉。"},
-      "assets": [{"file": "assets/bw-2023-poster.jpg", "method": "live-cdn", "source": "https://i0.hdslb.com/bfs/activity-plat/static/20230613/a08928aa3f1a6d7fca6d869175739bfb/QtRiI50Y5h.jpg", "evidence": "2026-11-24：仍在线的官网 HTML 引用 index.e2f518f1.js；该应用与先前取得的归档应用均将 loadingKv 配置为此 URL。已核对完整 JPEG 与 PV 封面、招商页人物主视觉一致。", "width": 3000, "height": 1688, "sha256": "0ec2f34e3dcfc5159efde7dca32b5a1da1a819d41525b2eaf5841e1b6880c04b"}]
+      "referenceVideo": {
+        "url": "https://www.bilibili.com/video/BV1i14y1m7DA",
+        "title": "BilibiliWorld 2023 宣传PV",
+        "cover": "https://i0.hdslb.com/bfs/archive/51c859441eb9f1dff9cb45fbc85178c90f159123.jpg",
+        "evidence": "2026-11-24：公开视频信息接口返回该标题与封面；已核对招商背景和封面的人物及主视觉。"
+      },
+      "assets": [
+        {
+          "file": "assets/bw-2023-poster.jpg",
+          "method": "live-cdn",
+          "source": "https://i0.hdslb.com/bfs/activity-plat/static/20230613/a08928aa3f1a6d7fca6d869175739bfb/QtRiI50Y5h.jpg",
+          "evidence": "2026-11-24：仍在线的官网 HTML 引用 index.e2f518f1.js；该应用与先前取得的归档应用均将 loadingKv 配置为此 URL。已核对完整 JPEG 与 PV 封面、招商页人物主视觉一致。",
+          "width": 3000,
+          "height": 1688,
+          "sha256": "0ec2f34e3dcfc5159efde7dca32b5a1da1a819d41525b2eaf5841e1b6880c04b"
+        }
+      ]
     },
     {
       "year": 2024,
       "archivePage": "https://web.archive.org/web/20240703050139id_/https://bw.bilibili.com/",
-      "dates": ["2024-07-12", "2024-07-14"],
+      "dates": [
+        "2024-07-12",
+        "2024-07-14"
+      ],
       "venue": "上海 · 国家会展中心",
       "dateEvidence": "主视觉海报显示 2024 年 7 月 12 日至 14 日，上海·国家会展中心；归档 app.9d8d4e4b.js 列出 7.12、7.13、7.14。",
       "coverage": "官网主 KV 海报；视频取回超时，使用完整海报。",
-      "assets": [{"file": "assets/bw-2024-poster.jpg", "method": "live-cdn", "source": "https://i0.hdslb.com/bfs/activity-plat/static/20240520/4920177e4bf9eb2b0fd8dacba0e5dbf8/k2axpd7x4I.jpeg@1920w_1080h.jpg", "archiveAttempt": "归档取回超时；归档 HTML 回放并沿原 CDN 加载动态模块后确认 .kv-module-wrap 背景。", "videoSource": "https://boss.hdslb.com/aigc-creator/bilibili-studio/resources/videos/6d0e7f8f76f6dc6bf33b259df7a05b16.mp4"}]
+      "assets": [
+        {
+          "file": "assets/bw-2024-poster.jpg",
+          "method": "live-cdn",
+          "source": "https://i0.hdslb.com/bfs/activity-plat/static/20240520/4920177e4bf9eb2b0fd8dacba0e5dbf8/k2axpd7x4I.jpeg@1920w_1080h.jpg",
+          "archiveAttempt": "归档取回超时；归档 HTML 回放并沿原 CDN 加载动态模块后确认 .kv-module-wrap 背景。",
+          "videoSource": "https://boss.hdslb.com/aigc-creator/bilibili-studio/resources/videos/6d0e7f8f76f6dc6bf33b259df7a05b16.mp4"
+        }
+      ]
     },
     {
       "year": 2025,
       "archivePage": "https://web.archive.org/web/20250701092658id_/https://bw.bilibili.com/2025/",
-      "dates": ["2025-07-11", "2025-07-13"],
+      "dates": [
+        "2025-07-11",
+        "2025-07-13"
+      ],
       "venue": "上海 · 国家会展中心",
       "dateEvidence": "主视觉海报显示 07.11–07.13，上海·国家会展中心；归档 app.f2118a88.js 列出 7.11、7.12、7.13。",
       "coverage": "官网主 KV 海报；视频取回超时，使用完整海报。",
-      "assets": [{"file": "assets/bw-2025-poster.jpg", "method": "live-cdn", "source": "https://i0.hdslb.com/bfs/activity-plat/static/20250603/4920177e4bf9eb2b0fd8dacba0e5dbf8/hLC8OJDn7U.jpg", "archiveAttempt": "归档取回超时；归档 HTML 回放并沿原 CDN 加载动态模块后确认 .kv-module-wrap 背景。", "videoSource": "https://boss.hdslb.com/aigc-creator/bilibili-studio/kv_video_new2.mp4"}]
+      "assets": [
+        {
+          "file": "assets/bw-2025-poster.jpg",
+          "method": "live-cdn",
+          "source": "https://i0.hdslb.com/bfs/activity-plat/static/20250603/4920177e4bf9eb2b0fd8dacba0e5dbf8/hLC8OJDn7U.jpg",
+          "archiveAttempt": "归档取回超时；归档 HTML 回放并沿原 CDN 加载动态模块后确认 .kv-module-wrap 背景。",
+          "videoSource": "https://boss.hdslb.com/aigc-creator/bilibili-studio/kv_video_new2.mp4"
+        }
+      ]
     },
     {
       "year": 2026,
       "archivePage": "https://web.archive.org/web/20260617060011id_/https://bw.bilibili.com/2026/",
-      "dates": ["2026-07-10", "2026-07-12"],
+      "dates": [
+        "2026-07-10",
+        "2026-07-12"
+      ],
       "venue": "上海 · 国家会展中心",
       "dateEvidence": "官网主视觉海报显示 2026.7.10–12，上海·国家会展中心。",
       "coverage": "现有官网主 KV 视频与海报，由归档页面引用交叉确认。",
       "assets": [
-        {"file": "assets/bw-2026-banner.mp4", "method": "live-cdn", "source": "https://i0.hdslb.com/bfs/activity-plat/static/20260529/ab7d0705cc5350aa3cc844d35b41cabf/SC6MxG2VIq.mp4"},
-        {"file": "assets/bw-2026-poster.jpg", "method": "live-cdn", "source": "https://i0.hdslb.com/bfs/activity-plat/static/20260601/ab7d0705cc5350aa3cc844d35b41cabf/U9ZY0WPYp5.jpg"}
+        {
+          "file": "assets/bw-2026-banner.mp4",
+          "method": "live-cdn",
+          "source": "https://i0.hdslb.com/bfs/activity-plat/static/20260529/ab7d0705cc5350aa3cc844d35b41cabf/SC6MxG2VIq.mp4"
+        },
+        {
+          "file": "assets/bw-2026-poster.jpg",
+          "method": "live-cdn",
+          "source": "https://i0.hdslb.com/bfs/activity-plat/static/20260601/ab7d0705cc5350aa3cc844d35b41cabf/U9ZY0WPYp5.jpg"
+        }
       ]
     }
   ],
   "gaps": [
-    {"year": 2017, "reason": "未取得 bw.bilibili.com/2017/ 可验证页面及主视觉；calendarcaptures 返回空对象。这不代表该年没有活动。"}
+    {
+      "year": 2017,
+      "reason": "未取得 bw.bilibili.com/2017/ 可验证页面及主视觉；calendarcaptures 返回空对象。这不代表该年没有活动。"
+    }
   ]
 }

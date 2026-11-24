@@ -55,16 +55,17 @@ if (currentEvent) {
     element('farewellBadge').textContent = `哔哩哔哩 · BilibiliWorld ${currentEvent.year}`;
     if (currentEvent.officialUrl) element('officialLink').href = currentEvent.officialUrl;
     if (currentEvent.poster) {
-        document.documentElement.style.setProperty('--poster', `url("${currentEvent.poster}")`);
-        backgroundPoster.src = currentEvent.poster;
+        const posterUrl = `${currentEvent.poster}?v=20261124-safe-end`;
+        document.documentElement.style.setProperty('--poster', `url("${posterUrl}")`);
+        backgroundPoster.src = posterUrl;
         backgroundPoster.hidden = false;
-        element('backgroundVideo').poster = currentEvent.poster;
+        element('backgroundVideo').poster = posterUrl;
     }
     document.documentElement.style.setProperty('--background-color', currentEvent.color);
     document.documentElement.dataset.year = currentEvent.year;
     document.documentElement.dataset.eventStatus = currentEvent.status;
     document.querySelector('meta[name="theme-color"]').content = currentEvent.color;
-    if (currentEvent.video) element('backgroundVideo').dataset.src = currentEvent.video;
+    if (currentEvent.video) element('backgroundVideo').dataset.src = `${currentEvent.video}?v=20261124-safe-end`;
     if (currentEvent.status === 'not-held') {
         document.title = `Bilibili World ${currentEvent.year} · 当年未举办`;
         element('countdown').dataset.phase = 'not-held';
@@ -200,11 +201,8 @@ function playBackground(replay = false) {
 }
 video.addEventListener('playing', () => { video.classList.add('is-playing'); updateMotionButton(); });
 video.addEventListener('pause', updateMotionButton);
-video.addEventListener('ended', () => {
-    // 2021 加载动画结尾淡出，结束后展示完整主图。
-    if (currentEvent?.year === 2021) video.classList.remove('is-playing');
-    updateMotionButton();
-});
+// 素材已去掉片尾退场，保留最后一帧；无需在 ended 时切图或等待定时器。
+video.addEventListener('ended', updateMotionButton);
 video.addEventListener('error', () => {
     videoFailed = true;
     video.classList.remove('is-playing');
