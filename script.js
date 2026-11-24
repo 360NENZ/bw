@@ -34,6 +34,8 @@ if (currentEvent) {
     element('endDate').dateTime = currentEvent.endDate;
     element('endDate').textContent = currentEvent.endDate.slice(5).replace('-', '.');
     element('visualNote').textContent = currentEvent.visualNote;
+    element('farewellBadge').textContent = `哔哩哔哩 · BilibiliWorld ${currentEvent.year}`;
+    element('officialLink').href = currentEvent.officialUrl;
     document.documentElement.style.setProperty('--poster', `url("${currentEvent.poster}")`);
     document.documentElement.style.setProperty('--background-color', currentEvent.color);
     document.documentElement.dataset.year = currentEvent.year;
@@ -165,10 +167,6 @@ document.addEventListener('fullscreenchange', () => {
 // 打开页面时仅在每日闭馆后或整届落幕后展示，不使用持久化标记跳过。
 const farewellDialog = element('farewellDialog');
 if (shouldShowFarewell() && typeof farewellDialog.showModal === 'function') {
-    const ended = BWEvents.getClock(currentEvent).phase === 'ended';
-    element('farewellContext').textContent = ended ? `BW ${currentEvent.year} 的旅程暂告一段落，这里继续记录我们与 BW 的时光。` : `BW ${currentEvent.year} 今日已闭馆，让我们带着热爱，期待明天再见。`;
-    // 保留 2026 寄语原文，不将其署名为往届寄语。
-    element('farewellOrigin').textContent = currentEvent.year === 2026 ? '非官方纪念页面 · 愿热爱常在' : `正在回望 BW ${currentEvent.year} · 以上小园长寄语来自 BW 2026`;
     farewellDialog.showModal();
     farewellDialog.addEventListener('close', () => {
         element('countdown').focus({ preventScroll: true });
