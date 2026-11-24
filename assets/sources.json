@@ -57,8 +57,11 @@
       "dates": ["2023-07-21", "2023-07-23"],
       "venue": "上海 · 国家会展中心",
       "dateEvidence": "归档 CSS 引用 info.98e11060.png；原 CDN 图片显示 上海 / 2023.7.21–23 国家会展中心。",
-      "coverage": "首页默认场景「恋恋心声」PAG 静帧；官网同年首页可切换多个场景。",
-      "assets": [{"file": "assets/bw-2023-poster.jpg", "method": "rendered-wayback-pag", "source": "https://i0.hdslb.com/bfs/activity-plat/static/20230602/a08928aa3f1a6d7fca6d869175739bfb/2adBnAw0zY.pag", "archive": "https://web.archive.org/web/20230623125230id_/https://i0.hdslb.com/bfs/activity-plat/static/20230602/a08928aa3f1a6d7fca6d869175739bfb/2adBnAw0zY.pag", "derivation": "libpag 4.1.8 渲染归档 PAG，进度 0.95，1920×1080 Canvas 静帧转 JPEG；渲染器不作为站点依赖。"}]
+      "currentPage": "https://www.bilibili.com/blackboard/bw/2023/index.html",
+      "referencePromotionPage": "https://web.archive.org/web/20230401181517/https://bw.bilibili.com/",
+      "coverage": "官网 loadingKv 配置引用的完整 3000×1688 横版主视觉原图，不含招商信息、联系方式或往期回顾按钮，未经裁剪或重新拼接。与宣传 PV 封面及 4 月招商页背景使用同一套人物主视觉。",
+      "referenceVideo": {"url": "https://www.bilibili.com/video/BV1i14y1m7DA", "title": "BilibiliWorld 2023 宣传PV", "cover": "https://i0.hdslb.com/bfs/archive/51c859441eb9f1dff9cb45fbc85178c90f159123.jpg", "evidence": "2026-11-24：公开视频信息接口返回该标题与封面；已核对招商背景和封面的人物及主视觉。"},
+      "assets": [{"file": "assets/bw-2023-poster.jpg", "method": "live-cdn", "source": "https://i0.hdslb.com/bfs/activity-plat/static/20230613/a08928aa3f1a6d7fca6d869175739bfb/QtRiI50Y5h.jpg", "evidence": "2026-11-24：仍在线的官网 HTML 引用 index.e2f518f1.js；该应用与先前取得的归档应用均将 loadingKv 配置为此 URL。已核对完整 JPEG 与 PV 封面、招商页人物主视觉一致。", "width": 3000, "height": 1688, "sha256": "0ec2f34e3dcfc5159efde7dca32b5a1da1a819d41525b2eaf5841e1b6880c04b"}]
     },
     {
       "year": 2024,
