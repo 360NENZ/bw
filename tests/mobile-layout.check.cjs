@@ -21,13 +21,22 @@ async function assertFits(page, label) {
 (async () => {
     const browser = await chromium.launch({ channel: 'msedge', headless: true });
     try {
-        for (const fontMode of ['loaded', 'delayed', 'failed']) {
+        for (const fontMode of ['native', 'loaded', 'delayed', 'failed']) {
             const context = await browser.newContext({ isMobile: true, hasTouch: true, deviceScaleFactor: 3, viewport: { width: 360, height: 850 }, reducedMotion: 'reduce' });
             const page = await context.newPage();
             // 固定测试值，避免一秒刷新把未来日期恢复为真实当前日期。
             await page.addInitScript(() => { window.setInterval = () => 0; });
             const errors = [];
             page.on('pageerror', error => errors.push(error.message));
+            await page.route('https://umami.360nenz.top/**', route => route.fulfill({ contentType: 'application/javascript', body: '' }));
+            if (fontMode !== 'native') await page.route('**/style.css?*', async route => {
+                const response = await route.fetch();
+                // 模拟设备没有电脑字体，直接验证随项目提供的回退字体。
+                const css = (await response.text())
+                    .replace(/--font-ui:[^;]+;/, '--font-ui: "BW Sans", sans-serif;')
+                    .replace(/--font-numbers:[^;]+;/, '--font-numbers: "BW Numbers", Arial, sans-serif;');
+                await route.fulfill({ response, body: css });
+            });
             if (fontMode === 'failed') await page.route('**/fonts/*.woff2', route => route.abort());
             if (fontMode === 'delayed') await page.route('**/fonts/*.woff2', async route => {
                 await new Promise(resolve => setTimeout(resolve, 1000));
@@ -37,7 +46,22 @@ async function assertFits(page, label) {
             await page.locator('#farewellDialog button').click();
             await assertFits(page, `${fontMode}: 初次加载`);
             await page.evaluate(() => document.fonts.ready);
-            if (fontMode !== 'failed') {
+            if (fontMode === 'native') {
+                const cdp = await context.newCDPSession(page);
+                await cdp.send('DOM.enable'); await cdp.send('CSS.enable');
+                const { root } = await cdp.send('DOM.getDocument');
+                for (const selector of ['#days', '#eventTitle']) {
+                    const { nodeId } = await cdp.send('DOM.querySelector', { nodeId: root.nodeId, selector });
+                    const { fonts } = await cdp.send('CSS.getPlatformFontsForNode', { nodeId });
+                    assert.ok(fonts.length > 0);
+                    if (process.platform === 'win32') {
+                        assert.ok(fonts.every(font => !font.isCustomFont), `${selector}: 应优先使用本机字体 ${JSON.stringify(fonts)}`);
+                        if (selector === '#days') assert.ok(fonts.some(font => font.familyName === 'Bahnschrift'));
+                    }
+                    console.log(`${selector}: ${fonts.map(font => font.familyName).join(', ')}`);
+                }
+                await cdp.detach();
+            } else if (fontMode !== 'failed') {
                 for (const family of ['BW Numbers', 'BW Sans']) assert.equal(await page.evaluate(family => [...document.fonts].find(font => font.family === family)?.status, family), 'loaded');
             }
             // 最坏情况下回退至手机常见的宽数字字体，检查字体度量变化后的布局。
@@ -55,7 +79,7 @@ async function assertFits(page, label) {
             assert.deepEqual(errors, []);
             await context.close();
         }
-        console.log('字体正常、延迟和失败回退；8 种宽度；四至七位天数均无溢出。');
+        console.log('本机字体优先、随项目字体正常/延迟/失败回退；8 种宽度；四至七位天数均无溢出。');
     } finally {
         await browser.close();
     }

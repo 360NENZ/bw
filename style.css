@@ -23,8 +23,8 @@
     --sky: #bdeeff;
     --yellow: #f6ef69;
     --background-color: #1952bb;
-    --font-ui: "BW Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
-    --font-numbers: "BW Numbers", "Arial", sans-serif;
+    --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "BW Sans", sans-serif;
+    --font-numbers: "Bahnschrift", "DIN Alternate", "BW Numbers", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
     font-family: var(--font-ui);
     color: var(--ink);
     background: var(--background-color);
@@ -148,9 +148,9 @@ h2 { margin: 0; font-size: 14px; font-weight: 700; color: #102a6b; }
 .timer-grid { display: grid; grid-template-columns: minmax(0, var(--days-column, 1.5fr)) auto minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 6px; margin-top: 14px; min-width: 0; }
 .time-box { text-align: center; min-width: 0; padding: 10px 6px 8px; background: rgb(255 255 255 / 70%); border: 1px solid rgb(215 230 250 / 75%); border-radius: 12px; box-shadow: 0 2px 8px rgb(18 51 121 / 5%), inset 0 1px 0 rgb(255 255 255 / 90%); transition: transform .2s ease, background .2s ease, box-shadow .2s ease; }
 .time-box:hover { background: rgb(255 255 255 / 95%); transform: translateY(-2px); box-shadow: 0 5px 14px rgb(18 51 121 / 10%); }
-.time-value { display: block; min-width: 0; white-space: nowrap; font-family: var(--font-numbers); font-size: clamp(36px, 4vw, 64px); font-weight: 600; font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; line-height: 1.15; letter-spacing: -.02em; color: #0c2d74; }
+.time-value { display: block; min-width: 0; white-space: nowrap; font-family: var(--font-numbers); font-size: clamp(36px, 4vw, 64px); font-weight: 650; font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; line-height: 1.15; letter-spacing: -.02em; color: #0c2d74; }
 .time-label { display: block; margin-top: 4px; font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; }
-.time-separator { color: #8faed8; font-family: var(--font-numbers); font-size: clamp(24px, 2.8vw, 38px); font-weight: 600; line-height: 1; text-align: center; user-select: none; margin-bottom: 16px; }
+.time-separator { color: #8faed8; font-family: var(--font-numbers); font-size: clamp(24px, 2.8vw, 38px); font-weight: 700; line-height: 1; text-align: center; user-select: none; margin-bottom: 16px; }
 .countdown-bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; }
 .countdown-bottom p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
 .official-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex-shrink: 0; min-height: 36px; padding: 8px 14px; border: 1px solid #b9d2f2; border-radius: 8px; font-size: 12px; font-weight: 700; color: var(--ink); background: rgb(255 255 255 / 75%); box-shadow: 0 2px 6px rgb(8 30 90 / 6%); transition: all .2s ease; }
