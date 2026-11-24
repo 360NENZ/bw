@@ -2,6 +2,16 @@ const selection = BWEvents.resolveYear(location.search);
 const currentEvent = selection.event;
 const showOpeningHours = new URLSearchParams(location.search).get('showHours') === '1';
 const element = id => document.getElementById(id);
+const backgroundPoster = document.createElement('img');
+backgroundPoster.id = 'backgroundPoster';
+backgroundPoster.className = 'background-poster';
+backgroundPoster.alt = '';
+backgroundPoster.decoding = 'async';
+backgroundPoster.hidden = true;
+backgroundPoster.addEventListener('load', () => {
+    document.documentElement.dataset.posterOrientation = backgroundPoster.naturalHeight > backgroundPoster.naturalWidth ? 'portrait' : 'landscape';
+});
+document.querySelector('.background').prepend(backgroundPoster);
 
 element('brandYear').textContent = selection.year || '年份无效';
 element('eventYear').textContent = selection.year || '';
@@ -37,6 +47,8 @@ if (currentEvent) {
     element('farewellBadge').textContent = `哔哩哔哩 · BilibiliWorld ${currentEvent.year}`;
     element('officialLink').href = currentEvent.officialUrl;
     document.documentElement.style.setProperty('--poster', `url("${currentEvent.poster}")`);
+    backgroundPoster.src = currentEvent.poster;
+    backgroundPoster.hidden = false;
     document.documentElement.style.setProperty('--background-color', currentEvent.color);
     document.documentElement.dataset.year = currentEvent.year;
     document.querySelector('meta[name="theme-color"]').content = currentEvent.color;
