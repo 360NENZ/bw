@@ -1,5 +1,7 @@
 """生成页面使用的本地 WOFF2 子集；原始字体与授权见 assets/fonts/sources.json。"""
 import argparse
+import hashlib
+import json
 from pathlib import Path
 
 from fontTools import subset
@@ -30,3 +32,10 @@ for source, filename, glyphs in [
     destination = output / filename
     font.save(destination)
     print(f"{filename}: {destination.stat().st_size:,} bytes")
+
+manifest = output / "sources.json"
+if manifest.exists():
+    sources = json.loads(manifest.read_text(encoding="utf-8-sig"))
+    for record in sources["fonts"]:
+        record["sha256"] = hashlib.sha256((root / record["file"]).read_bytes()).hexdigest()
+    manifest.write_text(json.dumps(sources, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

@@ -107,7 +107,40 @@ const timeFields = ['days', 'hours', 'minutes', 'seconds'].map(element);
 const countdownTitle = element('countdownTitle');
 const eventStatus = element('eventStatus');
 const countdownNote = element('countdownNote');
+const timerGrid = element('timerGrid');
 let lastState;
+let fitFrame;
+
+function fitTimeFields() {
+    fitFrame = null;
+    if (currentEvent?.status !== 'held') return;
+    // 先恢复响应式字号，再按当前字体的真实字宽测量；不裁剪或截断天数。
+    timeFields.forEach(field => field.style.removeProperty('font-size'));
+    const sizes = timeFields.map(field => {
+        const range = document.createRange();
+        range.selectNodeContents(field);
+        return {
+            available: field.getBoundingClientRect().width - 1,
+            width: range.getBoundingClientRect().width,
+            fontSize: parseFloat(getComputedStyle(field).fontSize)
+        };
+    });
+    sizes.forEach(({ available, width, fontSize }, index) => {
+        if (available > 0 && width > available) {
+            timeFields[index].style.fontSize = `${Math.floor(fontSize * available / width * 100) / 100}px`;
+        }
+    });
+}
+
+function scheduleTimeFit() {
+    if (currentEvent?.status === 'held' && fitFrame == null) fitFrame = requestAnimationFrame(fitTimeFields);
+}
+if (currentEvent?.status === 'held') {
+    if (typeof ResizeObserver === 'function') new ResizeObserver(scheduleTimeFit).observe(timerGrid);
+    window.addEventListener('resize', scheduleTimeFit);
+    document.fonts?.ready.then(scheduleTimeFit);
+    document.fonts?.addEventListener('loadingdone', scheduleTimeFit);
+}
 
 function shouldShowFarewell(now = Date.now()) {
     return BWEvents.shouldShowFarewell(currentEvent, now);
@@ -119,8 +152,12 @@ function updateCountdown(now = Date.now()) {
     const { phase, values, openingStatus, open } = clock;
     timeFields.forEach((field, index) => {
         const value = String(values[index]).padStart(index === 0 ? 3 : 2, '0');
-        if (field.textContent !== value) field.textContent = value;
+        if (field.textContent !== value) {
+            field.textContent = value;
+            if (index === 0) timerGrid.style.setProperty('--days-column', `${value.length / 2}fr`);
+        }
     });
+    scheduleTimeFit();
     const state = phase === 'ongoing' ? `${phase}:${openingStatus}` : phase;
     if (state !== lastState) {
         const copy = {

@@ -9,7 +9,7 @@
       "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
       "file": "assets/fonts/bw-sans.woff2",
       "weights": "100–900（可变字体）",
-      "sha256": "32007eb5919d72d221fb266b3da9108fd8c7f85a73f2ae94a507307e5d125e96",
+      "sha256": "f6955ed8b435a052a62170c61b4ebdf350334638f7abef3daa3b19fca876a805",
       "family": "Noto Sans SC"
     },
     {
@@ -17,7 +17,7 @@
       "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/barlowsemicondensed/BarlowSemiCondensed-SemiBold.ttf",
       "file": "assets/fonts/bw-numbers.woff2",
       "weights": "600",
-      "sha256": "32734bfa4d1ab57d740b3467692ac188388ecda21cea371070ffe7434847d87c",
+      "sha256": "d55073cd78d79e2c5e91635be4df83110b21b97e8e027283423b294288d36863",
       "family": "Barlow Semi Condensed"
     }
   ]
