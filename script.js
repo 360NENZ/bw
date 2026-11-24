@@ -52,7 +52,6 @@ if (currentEvent) {
     element('startDate').textContent = startDate.replaceAll('-', '.');
     element('endDate').dateTime = endDate;
     element('endDate').textContent = endDate.slice(5).replace('-', '.');
-    element('visualNote').textContent = currentEvent.visualNote;
     element('farewellBadge').textContent = `哔哩哔哩 · BilibiliWorld ${currentEvent.year}`;
     if (currentEvent.officialUrl) element('officialLink').href = currentEvent.officialUrl;
     if (currentEvent.poster) {
@@ -90,7 +89,7 @@ if (currentEvent) {
     element('unavailablePanel').hidden = false;
     element('countdown').dataset.phase = 'unavailable';
     element('unavailableTitle').textContent = selection.invalid ? '年份参数需要四位数字' : `BW ${selection.year} 暂未收录`;
-    element('unavailableMessage').textContent = selection.invalid ? '例如在链接中使用 ?year=2025。也可以从右上角选择已收录年份。' : '尚未取得这一年的可验证主视觉与活动日期。请选择已收录年份，继续回望与 BW 的时光。';
+    element('unavailableMessage').textContent = selection.invalid ? '例如在链接中使用 ?year=2025。也可以从右上角选择已收录年份。' : '请选择其他年份，继续回望与 BW 的时光。';
 }
 
 document.addEventListener('click', event => {

@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1549b8">
-    <meta name="description" content="Bilibili World 非官方纪念页面。回望历年主视觉，记录开场倒计时与落幕后的时光。">
+    <meta name="description" content="回望历年 Bilibili World，记录相遇与落幕后的时光。">
     <title>Bilibili World · 热爱不散场</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="preload" href="assets/fonts/bw-sans.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/fonts/bw-numbers.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="style.css?v=20261124-mobile-fonts">
-    <script src="events.js?v=20261124-history-2022" defer></script>
-    <script src="script.js?v=20261124-mobile-fonts" defer></script>
+    <link rel="stylesheet" href="style.css?v=20261124-clean-copy">
+    <script src="events.js?v=20261124-clean-copy" defer></script>
+    <script src="script.js?v=20261124-clean-copy" defer></script>
 </head>
 <body>
     <a class="skip-link" href="#countdown">跳转到活动信息</a>
@@ -23,7 +23,7 @@
         <header class="site-header">
             <a class="site-brand" href="./" aria-label="BW 纪念页面首页">
                 <span class="brand-mark">BW<span id="brandYear"></span></span>
-                <span class="brand-caption"><span class="theme-name" id="themeName">热爱不散场</span><span>非官方纪念页面</span></span>
+                <span class="brand-caption"><span class="theme-name" id="themeName">热爱不散场</span></span>
             </a>
             <nav class="page-tools" aria-label="页面工具">
                 <details class="year-picker" id="yearPicker" hidden>
@@ -47,7 +47,6 @@
                     <p class="event-location" id="eventLocation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><span id="venue"></span></p>
                     <p class="event-date" id="eventDate"><span id="dateLabel" hidden>原定日期</span><time id="startDate"></time><span>—</span><time id="endDate"></time><span class="timezone" id="eventTimezone">北京时间</span></p>
                     <p class="opening-hours" id="openingHours" hidden>每日 08:00–18:00</p>
-                    <p class="visual-note" id="visualNote"></p>
                     <a class="official-link announcement-link" id="announcementLink" hidden target="_blank" rel="noopener noreferrer">查看延期公告全文<span class="sr-only">（在新标签页打开）</span></a>
                 </div>
                 <div class="countdown-panel" id="countdownPanel">
@@ -82,7 +81,7 @@
                 </div>
                 <div class="unavailable-panel" id="unavailablePanel" hidden>
                     <h2 id="unavailableTitle">这个年份暂未收录</h2>
-                    <p id="unavailableMessage">请选择已收录年份，查看对应主视觉与活动时光。</p>
+                    <p id="unavailableMessage">请选择其他年份，继续回望与 BW 的时光。</p>
                     <a class="official-link" href="?year=2026" id="returnLink">查看 BW 2026</a>
                 </div>
             </section>
@@ -90,7 +89,7 @@
         </main>
         <footer class="site-footer">
             <p>热爱不散场，次元再相逢。</p>
-            <p>非官方页面 · <a href="assets/sources.json" target="_blank" rel="noopener noreferrer">BW 官网素材与归档来源</a><span class="credit">制作鸣谢：lrastar / Gemini3 Pro / 360NENZ / Codex（gpt-6.1-sol） / Antigravity（Gemini 3.8 Flash）</span></p>
+            <p><a href="assets/sources.json" target="_blank" rel="noopener noreferrer">资料来源</a><span class="credit">制作鸣谢：lrastar / Gemini3 Pro / 360NENZ / Codex（gpt-6.1-sol） / Antigravity（Gemini 3.8 Flash）</span></p>
         </footer>
     </div>
     <dialog class="farewell-dialog" id="farewellDialog" aria-labelledby="farewellTitle" aria-describedby="farewellMessage">
@@ -102,10 +101,6 @@
                 <p>谢谢你，愿意来到这里和我们做同一场梦。</p>
             </div>
             <p class="farewell-signature">From：BW 小园长</p>
-            <div class="farewell-note">
-                <p id="farewellContext"><strong>这一段旅程暂告一段落，</strong>这里继续记录我们与 BW 的时光。</p>
-                <p id="farewellOrigin">非官方纪念页面 · 愿热爱常在</p>
-            </div>
             <form method="dialog" class="farewell-actions"><button class="farewell-confirm" autofocus>好的，收到</button></form>
         </div>
     </dialog>

@@ -59,8 +59,7 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 .brand-mark { font-family: var(--font-ui); font-size: 34px; font-weight: 900; font-style: italic; letter-spacing: -2px; line-height: .95; }
 .brand-mark > span { display: block; margin-top: 5px; font-size: 13px; letter-spacing: 3px; font-style: normal; font-weight: 700; opacity: 0.95; }
 .brand-caption { border-left: 1px solid rgb(255 255 255 / 45%); padding-left: 18px; font-size: 15px; font-weight: 700; letter-spacing: 1.5px; }
-.brand-caption > span { display: block; margin-top: 5px; font-size: 11px; letter-spacing: 0.8px; font-weight: 400; opacity: 0.88; }
-.brand-caption > .theme-name { margin-top: 0; font-size: inherit; letter-spacing: inherit; font-weight: inherit; max-width: 260px; opacity: 1; }
+.brand-caption > .theme-name { display: block; max-width: 260px; }
 .page-tools { display: flex; align-items: center; gap: 10px; }
 .year-picker { position: relative; }
 .year-picker summary { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 16px; border: 1px solid rgb(255 255 255 / 45%); border-radius: 24px; background: rgb(12 48 116 / 55%); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 4px 16px rgb(5 20 60 / 18%); color: white; font-size: 13px; font-weight: 600; cursor: pointer; list-style: none; transition: all .2s cubic-bezier(0.2, 0.8, 0.2, 1); }
@@ -98,7 +97,6 @@ h1 span { white-space: nowrap; }
 .timezone { font-size: 10px; padding: 2px 6px; background: #e8f0fe; color: #1a56b8; border-radius: 4px; font-weight: 600; }
 .opening-hours { display: inline-flex; align-items: center; gap: 6px; margin: 9px 0 0; padding: 3px 10px; border-radius: 6px; background: #edf5ff; border: 1px solid #d4e4f7; color: #1e4f9b; font-size: 11px; font-weight: 600; }
 .opening-hours::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
-.visual-note { margin: 10px 0 0; font-size: 11px; line-height: 1.6; color: var(--muted); }
 .unavailable-panel { align-self: center; padding: 36px 40px; }
 .unavailable-panel h2 { font-size: 22px; color: #0c2d74; margin-bottom: 8px; }
 .unavailable-panel p { font-size: 14px; line-height: 1.85; color: var(--muted); margin-bottom: 20px; }
@@ -166,9 +164,6 @@ h2 { margin: 0; font-size: 14px; font-weight: 700; color: #102a6b; }
 .farewell-message p { margin: 0 0 16px; }
 .farewell-message p:last-child { color: #697487; }
 .farewell-signature { margin: 20px 0; text-align: right; font-size: 17px; font-weight: 700; color: #de3d77; }
-.farewell-note { padding-top: 18px; border-top: 1px dashed #d7deea; color: #758096; font-size: 14px; line-height: 1.7; }
-.farewell-note p { margin: 0; }
-.farewell-note strong { font-weight: 700; color: #5c677b; }
 .farewell-actions { display: flex; justify-content: flex-end; margin-top: 22px; }
 .farewell-confirm { min-height: 48px; padding: 11px 26px; border: none; border-radius: 12px; background: linear-gradient(135deg, #fa689b 0%, #ee4782 100%); color: white; font-size: 16px; font-weight: 700; box-shadow: 0 5px 16px rgb(238 84 139 / 28%); cursor: pointer; transition: all .2s ease; }
 .farewell-confirm:hover { background: linear-gradient(135deg, #f7558d 0%, #d8346e 100%); transform: translateY(-1px); box-shadow: 0 7px 20px rgb(238 84 139 / 36%); }
@@ -193,7 +188,6 @@ body:has(.farewell-dialog[open]) { overflow: hidden; }
     .farewell-dialog h2 { font-size: 19px; margin-bottom: 16px; }
     .farewell-message { font-size: 15px; line-height: 1.9; }
     .farewell-signature { font-size: 15px; margin: 20px 0; }
-    .farewell-note { font-size: 12px; padding-top: 16px; }
     .farewell-actions { margin-top: 20px; }
     .farewell-confirm { font-size: 16px; min-height: 48px; padding: 10px 20px; }
     .page-shell { padding: 20px 20px 16px; }
@@ -201,7 +195,7 @@ body:has(.farewell-dialog[open]) { overflow: hidden; }
     .background-video { object-position: 57% top; }
     .brand-mark { font-size: 28px; }
     .brand-caption { font-size: 12px; padding-left: 12px; letter-spacing: 1px; }
-    .brand-caption > .theme-name { max-width: 100px; }
+    .brand-caption > .theme-name { max-width: 140px; }
     .year-picker summary { padding: 10px; gap: 5px; font-size: 11px; }
     .year-picker summary #selectedYear { display: none; }
     .site-brand { gap: 12px; }
@@ -240,8 +234,7 @@ body:has(.farewell-dialog[open]) { overflow: hidden; }
     .site-header { gap: 8px; }
     .site-brand { gap: 8px; min-width: 0; }
     .brand-caption { font-size: 10px; padding-left: 8px; min-width: 0; }
-    .brand-caption > .theme-name { max-width: 72px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .brand-caption > span:last-child { font-size: 9px; letter-spacing: 0; white-space: nowrap; }
+    .brand-caption > .theme-name { max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .year-picker summary { width: 44px; white-space: nowrap; justify-content: center; }
     .year-picker summary > span { display: none; }
     .page-tools { flex-shrink: 0; }
