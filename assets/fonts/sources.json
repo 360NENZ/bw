@@ -1,0 +1,24 @@
+{
+  "retrieved": "2026-11-24",
+  "license": "SIL Open Font License 1.1",
+  "runtime": "本地 WOFF2；运行时不访问 Google Fonts 或外部 CDN。",
+  "subset": "Noto Sans SC 保留 index.html、events.js、script.js 使用的字符及基础 Latin 字符；Barlow Semi Condensed 保留基础 Latin 字符和数字，布局特性保留。",
+  "fonts": [
+    {
+      "licenseFile": "assets/fonts/NotoSansSC-OFL.txt",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+      "file": "assets/fonts/bw-sans.woff2",
+      "weights": "100–900（可变字体）",
+      "sha256": "32007eb5919d72d221fb266b3da9108fd8c7f85a73f2ae94a507307e5d125e96",
+      "family": "Noto Sans SC"
+    },
+    {
+      "licenseFile": "assets/fonts/BarlowSemiCondensed-OFL.txt",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/barlowsemicondensed/BarlowSemiCondensed-SemiBold.ttf",
+      "file": "assets/fonts/bw-numbers.woff2",
+      "weights": "600",
+      "sha256": "32734bfa4d1ab57d740b3467692ac188388ecda21cea371070ffe7434847d87c",
+      "family": "Barlow Semi Condensed"
+    }
+  ]
+}
