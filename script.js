@@ -18,7 +18,7 @@ element('eventYear').textContent = selection.year || '';
 element('eventTag').textContent = selection.year ? `BW ${selection.year}` : 'BW';
 element('selectedYear').textContent = selection.year || '选择年份';
 element('yearPicker').hidden = false;
-element('openingHours').hidden = !currentEvent || !showOpeningHours;
+element('openingHours').hidden = currentEvent?.status !== 'held' || !showOpeningHours;
 
 function yearUrl(year) {
     const url = new URL(location.href);
@@ -30,6 +30,13 @@ Object.values(BWEvents.events).reverse().forEach(event => {
     const link = document.createElement('a');
     link.href = yearUrl(event.year);
     link.textContent = String(event.year);
+    if (event.status === 'not-held') {
+        link.title = `BW ${event.year} · 当年未举办`;
+        const status = document.createElement('span');
+        status.className = 'year-status';
+        status.textContent = '未举办';
+        link.append(status);
+    }
     if (event === currentEvent) link.setAttribute('aria-current', 'page');
     element('yearLinks').append(link);
 });
@@ -39,21 +46,41 @@ if (currentEvent) {
     document.title = `Bilibili World ${currentEvent.year} · ${currentEvent.theme}`;
     element('themeName').textContent = currentEvent.theme;
     element('venue').textContent = currentEvent.venue;
-    element('startDate').dateTime = currentEvent.startDate;
-    element('startDate').textContent = currentEvent.startDate.replaceAll('-', '.');
-    element('endDate').dateTime = currentEvent.endDate;
-    element('endDate').textContent = currentEvent.endDate.slice(5).replace('-', '.');
+    const startDate = currentEvent.startDate || currentEvent.plannedStartDate;
+    const endDate = currentEvent.endDate || currentEvent.plannedEndDate;
+    element('startDate').dateTime = startDate;
+    element('startDate').textContent = startDate.replaceAll('-', '.');
+    element('endDate').dateTime = endDate;
+    element('endDate').textContent = endDate.slice(5).replace('-', '.');
     element('visualNote').textContent = currentEvent.visualNote;
     element('farewellBadge').textContent = `哔哩哔哩 · BilibiliWorld ${currentEvent.year}`;
-    element('officialLink').href = currentEvent.officialUrl;
-    document.documentElement.style.setProperty('--poster', `url("${currentEvent.poster}")`);
-    backgroundPoster.src = currentEvent.poster;
-    backgroundPoster.hidden = false;
+    if (currentEvent.officialUrl) element('officialLink').href = currentEvent.officialUrl;
+    if (currentEvent.poster) {
+        document.documentElement.style.setProperty('--poster', `url("${currentEvent.poster}")`);
+        backgroundPoster.src = currentEvent.poster;
+        backgroundPoster.hidden = false;
+        element('backgroundVideo').poster = currentEvent.poster;
+    }
     document.documentElement.style.setProperty('--background-color', currentEvent.color);
     document.documentElement.dataset.year = currentEvent.year;
+    document.documentElement.dataset.eventStatus = currentEvent.status;
     document.querySelector('meta[name="theme-color"]').content = currentEvent.color;
-    element('backgroundVideo').poster = currentEvent.poster;
     if (currentEvent.video) element('backgroundVideo').dataset.src = currentEvent.video;
+    if (currentEvent.status === 'not-held') {
+        document.title = `Bilibili World ${currentEvent.year} · 当年未举办`;
+        element('countdown').dataset.phase = 'not-held';
+        element('countdownPanel').hidden = true;
+        element('historyPanel').hidden = false;
+        element('dateLabel').hidden = false;
+        element('eventTimezone').hidden = true;
+        element('announcementLink').hidden = false;
+        element('announcementLink').href = currentEvent.announcement;
+        element('announcementDate').dateTime = currentEvent.announcementDate;
+        element('announcementDate').textContent = currentEvent.announcementDate.replaceAll('-', '.');
+        element('announcementSource').href = currentEvent.announcementUrl;
+        element('statusSource').href = currentEvent.statusUrl;
+        element('nextEventLink').href = yearUrl(2023);
+    }
 } else {
     document.title = selection.invalid ? 'BW · 年份参数无效' : `BW ${selection.year} · 暂未收录`;
     element('themeName').textContent = '回望历年 BW';
@@ -109,7 +136,7 @@ function updateCountdown(now = Date.now()) {
     }
 }
 updateCountdown();
-if (currentEvent) setInterval(() => updateCountdown(), 1000);
+if (currentEvent?.status === 'held') setInterval(() => updateCountdown(), 1000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) updateCountdown(); });
 
 const video = element('backgroundVideo');

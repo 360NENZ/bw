@@ -7,12 +7,12 @@
     <meta name="description" content="Bilibili World 非官方纪念页面。回望历年主视觉，记录开场倒计时与落幕后的时光。">
     <title>Bilibili World · 热爱不散场</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="style.css?v=20261124-poster-fit">
-    <script src="events.js?v=20261124-poster-fit" defer></script>
-    <script src="script.js?v=20261124-poster-fit" defer></script>
+    <link rel="stylesheet" href="style.css?v=20261124-history-2022">
+    <script src="events.js?v=20261124-history-2022" defer></script>
+    <script src="script.js?v=20261124-history-2022" defer></script>
 </head>
 <body>
-    <a class="skip-link" href="#countdown">跳转到倒计时</a>
+    <a class="skip-link" href="#countdown">跳转到活动信息</a>
     <div class="background" aria-hidden="true">
         <video id="backgroundVideo" class="background-video" muted playsinline preload="none"
             tabindex="-1"></video>
@@ -43,9 +43,10 @@
                     <div class="event-meta"><span class="flight-tag" id="eventTag">BW</span><span>和热爱一起出发</span></div>
                     <h1 id="eventTitle">Bilibili World <span id="eventYear"></span></h1>
                     <p class="event-location" id="eventLocation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><span id="venue"></span></p>
-                    <p class="event-date" id="eventDate"><time id="startDate"></time><span>—</span><time id="endDate"></time><span class="timezone">北京时间</span></p>
+                    <p class="event-date" id="eventDate"><span id="dateLabel" hidden>原定日期</span><time id="startDate"></time><span>—</span><time id="endDate"></time><span class="timezone" id="eventTimezone">北京时间</span></p>
                     <p class="opening-hours" id="openingHours" hidden>每日 08:00–18:00</p>
                     <p class="visual-note" id="visualNote"></p>
+                    <a class="official-link announcement-link" id="announcementLink" hidden target="_blank" rel="noopener noreferrer">查看延期公告全文<span class="sr-only">（在新标签页打开）</span></a>
                 </div>
                 <div class="countdown-panel" id="countdownPanel">
                     <div class="countdown-heading">
@@ -65,6 +66,17 @@
                         <p id="countdownNote">下一站，与你在现场相见。</p>
                         <a class="official-link" id="officialLink" href="https://bw.bilibili.com/#/" target="_blank" rel="noopener noreferrer">前往官网<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg><span class="sr-only">（在新标签页打开）</span></a>
                     </div>
+                </div>
+                <div class="history-panel" id="historyPanel" hidden aria-labelledby="historyTitle">
+                    <div class="history-heading"><span class="history-label">年度记录</span><span class="event-status">当年未举办</span></div>
+                    <h2 id="historyTitle">那年没能相见，热爱仍在。</h2>
+                    <p class="history-intro">受新冠疫情（COVID-19）及防控要求影响，BW 2022 未能举办。</p>
+                    <ol class="history-timeline">
+                        <li><time id="announcementDate" datetime="2022-05-23">2022.05.23</time><div><strong>官方宣布延期</strong><p>项目组说明，原定 7 月 15–17 日的活动将延期举办，后续方案待确认后通知。</p></div></li>
+                        <li><time datetime="2023-07-21">2023.07.21–23</time><div><strong>下一次相遇</strong><p>BW 2023 在上海国家会展中心举办，与大家再次相见。</p></div></li>
+                    </ol>
+                    <blockquote>“待云开日现，请来BW星球与我们重逢吧！”<cite>—— BW 2022 延期公告</cite></blockquote>
+                    <div class="history-sources"><a id="announcementSource" target="_blank" rel="noopener noreferrer">延期公告转载</a><a id="statusSource" target="_blank" rel="noopener noreferrer">未举办记录</a><a class="official-link" id="nextEventLink">回望 BW 2023 →</a></div>
                 </div>
                 <div class="unavailable-panel" id="unavailablePanel" hidden>
                     <h2 id="unavailableTitle">这个年份暂未收录</h2>

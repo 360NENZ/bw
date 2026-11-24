@@ -9,7 +9,8 @@ test('默认 2026，年份独立解析；未收录与错误参数不借用其他
     assert.equal(resolveYear('').event, events[2026]);
     assert.equal(resolveYear('?showHours=1').event, events[2026]);
     assert.equal(resolveYear('?year=2025&showHours=1').event, events[2025]);
-    for (const year of ['2017', '2022', '2030']) {
+    assert.equal(resolveYear('?year=2022').event, events[2022]);
+    for (const year of ['2017', '2030']) {
         const selection = resolveYear(`?year=${year}`);
         assert.equal(selection.year, year);
         assert.equal(selection.event, null);
@@ -53,7 +54,25 @@ test('选中历史年份使用真实日期：2020 在 8 月，2019 为广州站'
     assert.equal(events[2025].endDate, '2025-07-13');
 });
 
-for (const event of Object.values(events)) {
+test('2022 未举办：原定日期不驱动计时或闭馆寄语', () => {
+    const event = events[2022];
+    assert.equal(event.status, 'not-held');
+    assert.equal(event.start, null);
+    assert.equal(event.end, null);
+    assert.equal(event.startDate, null);
+    assert.equal(event.endDate, null);
+    assert.equal(event.plannedStartDate, '2022-07-15');
+    assert.equal(event.plannedEndDate, '2022-07-17');
+    assert.equal(event.announcementDate, '2022-05-23');
+    assert.equal(event.poster, null);
+    assert.equal(event.video, null);
+    for (const date of ['2022-05-22T12:00:00+08:00', '2022-05-23T12:00:00+08:00', '2022-07-15T07:59:59+08:00', '2022-07-15T08:00:00+08:00', '2022-07-15T18:00:00+08:00', '2022-07-17T18:00:00+08:00', '2030-01-01T00:00:00Z']) {
+        assert.equal(getClock(event, time(date)), null, date);
+        assert.equal(shouldShowFarewell(event, time(date)), false, date);
+    }
+});
+
+for (const event of Object.values(events).filter(event => event.status === 'held')) {
     test(`${event.year} 寄语仅在每天闭馆后或整届落幕后展示，遵循北京时间`, () => {
         const start = event.start;
         for (const [offset, expected] of [
@@ -73,14 +92,21 @@ for (const event of Object.values(events)) {
 
 test('所有收录年份都有本地素材与一致的来源日期，不将缺失年份标为已收录', () => {
     const sources = JSON.parse(fs.readFileSync(path.join(__dirname, '../assets/sources.json')));
-    assert.deepEqual(Object.keys(events), ['2018', '2019', '2020', '2021', '2023', '2024', '2025', '2026']);
+    assert.deepEqual(Object.keys(events), ['2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026']);
     for (const event of Object.values(events)) {
         const record = sources.years.find(source => source.year === event.year);
-        assert.deepEqual(record.dates, [event.startDate, event.endDate]);
-        for (const file of [event.poster, event.video].filter(Boolean)) {
+        if (event.status === 'not-held') {
+            assert.equal(record.status, 'not-held');
+            assert.equal(record.dates, null);
+            assert.deepEqual(record.plannedDates, [event.plannedStartDate, event.plannedEndDate]);
+            assert.equal(record.announcementDate, event.announcementDate);
+            assert.equal(record.announcementPage, event.announcementUrl);
+            assert.equal(record.statusReference, event.statusUrl);
+        } else assert.deepEqual(record.dates, [event.startDate, event.endDate]);
+        for (const file of [event.poster, event.video, event.announcement].filter(Boolean)) {
             assert.ok(fs.statSync(path.join(__dirname, '..', file)).size > 10000, file);
             assert.ok(record.assets.some(asset => asset.file === file), file);
         }
     }
-    assert.ok(!events[2022]);
+    assert.ok(!sources.gaps.some(source => source.year === 2022));
 });

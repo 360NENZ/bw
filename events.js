@@ -11,14 +11,25 @@
         [2025, '07-11', '07-13', '上海 · 国家会展中心', '爱的链接', '官网主视觉海报', '#164da6', 'jpg'],
         [2026, '07-10', '07-12', '上海 · 国家会展中心', '次元新航线', '官网主视觉', '#1952bb', 'jpg']
     ];
-    const events = Object.freeze(Object.fromEntries(records.map(([year, start, end, venue, theme, visualNote, color, extension]) => [year, Object.freeze({
-        year, startDate: `${year}-${start}`, endDate: `${year}-${end}`, venue, theme, visualNote, color,
+    const heldEvents = records.map(([year, start, end, venue, theme, visualNote, color, extension]) => [year, Object.freeze({
+        year, status: 'held', startDate: `${year}-${start}`, endDate: `${year}-${end}`, venue, theme, visualNote, color,
         poster: `assets/bw-${year}-poster.${extension}`,
         video: [2019, 2020, 2021, 2026].includes(year) ? `assets/bw-${year}-banner.mp4` : null,
         officialUrl: year === 2021 ? 'https://bw.bilibili.com/2021/index.html#/Home' : 'https://bw.bilibili.com/#/',
         start: Date.parse(`${year}-${start}T08:00:00+08:00`),
         end: Date.parse(`${year}-${end}T18:00:00+08:00`)
-    })])));
+    })]);
+    const events = Object.freeze(Object.fromEntries([...heldEvents, [2022, Object.freeze({
+        year: 2022, status: 'not-held', theme: '等待重逢的夏天',
+        venue: '线下活动 · 当年未举办',
+        startDate: null, endDate: null, start: null, end: null,
+        plannedStartDate: '2022-07-15', plannedEndDate: '2022-07-17',
+        announcementDate: '2022-05-23', announcement: 'assets/bw-2022-announcement.jpg',
+        poster: null, video: null, color: '#459fe5',
+        visualNote: '延期公告配色 · 年度纪念背景',
+        announcementUrl: 'https://www.onsiteclub.com/case/BW2022-Announced-Delay-Or-That-2022-5-24',
+        statusUrl: 'https://baike.baidu.com/en/item/BiliBili%20World/1469626'
+    })]]));
 
     function resolveYear(search = '') {
         const parameter = new URLSearchParams(search).get('year');
@@ -28,7 +39,8 @@
     }
 
     function getClock(event, now = Date.now()) {
-        if (!event) return null;
+        // 原定日期仅作历史资料；未举办的年份没有开场、落幕或寄语时机。
+        if (!event || event.status === 'not-held') return null;
         const phase = now < event.start ? 'upcoming' : now < event.end ? 'ongoing' : 'ended';
         const duration = phase === 'upcoming' ? event.start - now : now - (phase === 'ongoing' ? event.start : event.end);
         const totalSeconds = Math.floor(Math.max(0, duration) / 1000);

@@ -57,6 +57,7 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 .year-menu a { padding: 9px; text-align: center; border-radius: 8px; font-family: Arial, sans-serif; font-size: 14px; font-weight: 600; transition: background .15s ease, color .15s ease, transform .15s ease; }
 .year-menu a:hover { background: #e2eeff; transform: translateY(-1px); }
 .year-menu a[aria-current="page"] { background: var(--blue); color: white; font-weight: 700; box-shadow: 0 2px 8px rgb(24 90 219 / 35%); }
+.year-status { display: block; margin-top: 2px; font-size: 10px; font-weight: 400; opacity: .8; }
 .tool-button { display: inline-flex; justify-content: center; align-items: center; gap: 8px; min-height: 44px; padding: 10px 16px; border: 1px solid rgb(255 255 255 / 45%); border-radius: 24px; color: white; background: rgb(12 48 116 / 55%); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 4px 16px rgb(5 20 60 / 18%); cursor: pointer; font-size: 13px; font-weight: 600; transition: all .2s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .tool-button:hover { background: rgb(12 48 116 / 82%); border-color: rgb(255 255 255 / 75%); transform: translateY(-1px); box-shadow: 0 6px 20px rgb(5 20 60 / 26%); }
 .tool-button:active { transform: translateY(0); }
@@ -83,6 +84,29 @@ h1 span { white-space: nowrap; }
 .unavailable-panel { align-self: center; padding: 36px 40px; }
 .unavailable-panel h2 { font-size: 22px; color: #0c2d74; margin-bottom: 8px; }
 .unavailable-panel p { font-size: 14px; line-height: 1.85; color: var(--muted); margin-bottom: 20px; }
+/* 2022 未举办：参考延期公告的蓝色条纹，不替用其他届数主图。 */
+:root[data-event-status="not-held"] .background { background: repeating-linear-gradient(135deg, transparent 0 36px, rgb(255 255 255 / 5%) 36px 72px), #459fe5; }
+:root[data-event-status="not-held"] .main-content { justify-content: center; padding-block: 64px; }
+:root[data-event-status="not-held"] .event-info { display: flex; flex-direction: column; justify-content: center; }
+.announcement-link { align-self: flex-start; margin-top: 24px; }
+.history-panel { padding: 32px 38px; min-width: 0; }
+.history-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.history-label { color: var(--muted); font-size: 11px; letter-spacing: 2px; }
+.history-heading .event-status { background: #eaf0f7; color: #586577; }
+.history-heading .event-status::before { animation: none; }
+.history-panel h2 { margin: 20px 0 12px; font-size: clamp(20px, 2vw, 26px); line-height: 1.5; }
+.history-intro { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.8; }
+.history-timeline { list-style: none; padding: 0; margin: 24px 0; }
+.history-timeline li { display: grid; grid-template-columns: 110px 1fr; gap: 14px; padding: 14px 0; border-top: 1px dashed #c6d7eb; font-size: 12px; line-height: 1.7; }
+.history-timeline time { color: #1e4f9b; font-variant-numeric: tabular-nums; }
+.history-timeline strong { font-size: 13px; }
+.history-timeline p { margin: 4px 0 0; color: var(--muted); }
+.history-panel blockquote { margin: 0; padding: 12px 16px; border-left: 3px solid #459fe5; background: #eaf3fd; font-size: 13px; line-height: 1.9; }
+.history-panel cite { display: block; font-style: normal; color: var(--muted); font-size: 11px; }
+.history-sources { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 20px; font-size: 11px; }
+.history-sources > a:not(.official-link) { text-decoration: underline; text-underline-offset: 3px; }
+.history-sources > a:not(.official-link):hover { color: var(--blue); }
+.history-sources .official-link { margin-left: auto; }
 .countdown-panel { padding: 30px 38px 24px; min-width: 0; }
 .countdown-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 h2 { margin: 0; font-size: 14px; font-weight: 700; color: #102a6b; }
@@ -176,6 +200,10 @@ body:has(.farewell-dialog[open]) { overflow: hidden; }
     .event-date { font-size: 12px; }
     .countdown-panel { padding: 22px 24px; }
     .unavailable-panel { padding: 22px 24px; }
+    :root[data-event-status="not-held"] .main-content { padding-block: 32px; }
+    .history-panel { padding: 22px 24px; }
+    .history-timeline li { grid-template-columns: 1fr; gap: 4px; }
+    .history-sources .official-link { margin-left: 0; }
     .timer-grid { grid-template-columns: 1.2fr auto 1fr auto 1fr auto 1fr; gap: 4px; margin-top: 18px; }
     .time-box { padding: 8px 3px 6px; border-radius: 10px; }
     .time-value { font-size: clamp(34px, 9vw, 56px); letter-spacing: -1px; }
@@ -189,6 +217,7 @@ body:has(.farewell-dialog[open]) { overflow: hidden; }
 @media (max-width: 370px) {
     .page-shell { padding-inline: 14px; }
     .event-info, .countdown-panel { padding-inline: 18px; }
+    .history-panel { padding-inline: 18px; }
     .site-header { gap: 8px; }
     .site-brand { gap: 8px; min-width: 0; }
     .brand-caption { font-size: 10px; padding-left: 8px; min-width: 0; }
