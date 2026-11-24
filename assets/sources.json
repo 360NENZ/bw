@@ -52,6 +52,21 @@
       ]
     },
     {
+      "year": 2022,
+      "status": "not-held",
+      "dates": null,
+      "plannedDates": ["2022-07-15", "2022-07-17"],
+      "plannedVenue": "上海 · 国家会展中心",
+      "announcementDate": "2022-05-23",
+      "announcementPage": "https://www.onsiteclub.com/case/BW2022-Announced-Delay-Or-That-2022-5-24",
+      "dateEvidence": "ONSITECLUB 于 2022-05-24 转载 BilibiliWorld 园长微博截图和完整官方延期公告。公告落款为 BilibiliWorld 项目组、2022 年 5 月 23 日，正文明确原定 7 月 15–17 日，并说明疫情防控、疫情反弹风险与观众健康安全。转载日期不作为公告日期。",
+      "statusEvidence": "官方公告措辞为延期举办；百度百科 BiliBili World 条目另记载 2022 年受 COVID-19 影响取消、下一届于 2023 年 7 月 21–23 日举办。本页以当年未举办呈现结果，不把原定日期当作实际开闭馆时间，也不声称取得了官方取消公告。",
+      "statusReference": "https://baike.baidu.com/en/item/BiliBili%20World/1469626",
+      "nextEventPage": "https://www.bilibili.com/blackboard/bw/2023/index.html",
+      "coverage": "保存完整官方延期公告（第三方转载），供页面查看。未找到可验证的 2022 独立主 banner；页面背景仅参考公告的蓝色条纹配色，以 CSS 绘制，不使用其他年份主图。",
+      "assets": [{"file": "assets/bw-2022-announcement.jpg", "method": "reposted-official-announcement", "source": "https://res.onsiteclub.com/169fd7b9e98948cfba08681962d3d259.jpg", "evidence": "转载页第二张正文图片，与园长微博截图中的公告一致；保留全文、署名和落款，未裁剪。", "width": 1080, "height": 3399, "sha256": "665c7aef3e8a731cc5654038cf3ef273f4e88589d8b42ce586e2c19d6770e22a"}]
+    },
+    {
       "year": 2023,
       "archivePage": "https://web.archive.org/web/20230702082419id_/https://bw.bilibili.com/",
       "dates": ["2023-07-21", "2023-07-23"],
@@ -95,7 +110,6 @@
     }
   ],
   "gaps": [
-    {"year": 2017, "reason": "未取得 bw.bilibili.com/2017/ 可验证页面及主视觉；calendarcaptures 返回空对象。这不代表该年没有活动。"},
-    {"year": 2022, "reason": "未取得 bw.bilibili.com/2022/ 可验证页面及主视觉；calendarcaptures 返回空对象。不推断活动日期或举办情况。"}
+    {"year": 2017, "reason": "未取得 bw.bilibili.com/2017/ 可验证页面及主视觉；calendarcaptures 返回空对象。这不代表该年没有活动。"}
   ]
 }
