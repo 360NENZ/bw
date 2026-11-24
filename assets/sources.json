@@ -2,6 +2,15 @@
   "description": "BW 历年主视觉来源。Wayback 用于定位历史页面；原 CDN 补取、动画静帧和局部复原均单独标明。版权归原权利方所有。",
   "retrieved": "2026-11-23 / 2026-11-24",
   "hours": "统一使用用户指定的北京时间每日 08:00–18:00，不声明为历年官方开放时间。",
+  "identity": {
+    "page": "https://bw.bilibili.com/2026/",
+    "retrieved": "2026-11-24",
+    "assets": [
+      {"file": "assets/bw-logo.svg", "source": "https://activity.hdslb.com/blackboard/activity3ERAcwloghvz2600/js/app.defcc795.js", "method": "extracted-official-svg", "evidence": "官网 HTML 引用该应用，内含 logo-bw.svg / icon-logo-bw。将原 symbol 包装改为独立 svg，保留全部路径、填色和 viewBox。", "sha256": "36077aa8485072b7c2cef25b9aafd41d6b657d4b3f1e1829db8275279fbfc9c3"},
+      {"file": "assets/favicon.ico", "source": "https://i0.hdslb.com/bfs/activity-plat/static/20240529/4920177e4bf9eb2b0fd8dacba0e5dbf8/QsiGporZk4.ico", "method": "live-cdn", "evidence": "官网 HTML 的 rel=icon 使用粉色小电视星球图标。保留原始 ICO。", "sha256": "297918d59ca7ca4d10acfbe4642282cf5a18b8d66e182284c71a41f023203468"},
+      {"file": "assets/bw-icon.png", "source": "assets/favicon.ico", "method": "icon-format-conversion", "derivation": "从原 ICO 提取 128×128 PNG，供 apple-touch-icon 使用，保留透明背景。"}
+    ]
+  },
   "archiveSelection": "候选跨年度检索，参考当年活动前约一个月至下一届活动前约一个月的页面保留区间；最终依据页面标题、海报年份、活动日期与应用内容确定届数，不按抓取年份直接归类。",
   "years": [
     {
