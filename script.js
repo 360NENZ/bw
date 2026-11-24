@@ -101,6 +101,8 @@ if (currentEvent) setInterval(() => updateCountdown(), 1000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) updateCountdown(); });
 
 const video = element('backgroundVideo');
+// 即使页面保留了旧版 loop 属性，也只播放一遍。
+video.loop = false;
 const motionBtn = element('motionBtn');
 const motionLabel = element('motionLabel');
 const motionIcon = element('motionIcon');
@@ -123,7 +125,11 @@ function playBackground(replay = false) {
 }
 video.addEventListener('playing', () => { video.classList.add('is-playing'); updateMotionButton(); });
 video.addEventListener('pause', updateMotionButton);
-video.addEventListener('ended', updateMotionButton);
+video.addEventListener('ended', () => {
+    // 2021 加载动画结尾淡出，结束后展示完整主图。
+    if (currentEvent?.year === 2021) video.classList.remove('is-playing');
+    updateMotionButton();
+});
 video.addEventListener('error', () => {
     videoFailed = true;
     video.classList.remove('is-playing');

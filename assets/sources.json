@@ -45,7 +45,7 @@
       "dateEvidence": "归档 index.5c6dde78.css 的 .header .time 内嵌图片显示 上海·国家会展中心 2021.7.9（五）–7.11（日）。",
       "currentPage": "https://bw.bilibili.com/2021/index.html#/Home",
       "currentPageVerified": "2026-11-24：页面返回 200，标题 BW2021，全员宝藏，速速递上！；当前 index.dbea7288.js 及浏览器 video DOM 确认加载动画与归档应用指向同一视频。",
-      "coverage": "官网加载背景动画完整视频与 2 秒处静帧，取代先前的角色层局部复原。保留原动画内容，播放一遍后停留在最后一帧，可手动重播。",
+      "coverage": "官网加载背景动画完整视频与 2 秒处静帧，取代先前的角色层局部复原。保留原动画内容，播放一遍后停止；原视频结尾淡出，因此结束后展示 2 秒处完整主图，可手动重播。",
       "assets": [
         {"file": "assets/bw-2021-banner.mp4", "method": "live-cdn", "source": "https://activity.hdslb.com/blackboard/static/20210601/6722eca0e7e896d265f956d00ca4ff06/nMuVYG1vNF.mp4", "width": 1920, "height": 1080, "seconds": 4, "bytes": 2530918, "sha256": "baf58a9ae9dc1c8cdb1b0a227957d733499e25d423e7b09289a3ebfa3d26c047"},
         {"file": "assets/bw-2021-poster.jpg", "method": "video-frame", "source": "assets/bw-2021-banner.mp4", "derivation": "ffmpeg 在 2 秒处提取完整 JPEG。"}
