@@ -2,6 +2,19 @@ const selection = BWEvents.resolveYear(location.search);
 const currentEvent = selection.event;
 const showOpeningHours = new URLSearchParams(location.search).get('showHours') === '1';
 const element = id => document.getElementById(id);
+const portraitViewport = window.matchMedia('(orientation: portrait)');
+const assetVersion = '20261124-responsive-kv';
+const yearIcon = BWEvents.icons[selection.year];
+if (yearIcon) {
+    element('siteIcon').href = `${yearIcon.icon}?v=${assetVersion}`;
+    element('siteIcon').type = yearIcon.icon.endsWith('.ico') ? 'image/x-icon' : 'image/png';
+    if (yearIcon.icon.endsWith('.ico')) element('siteIcon').sizes = 'any';
+    else element('siteIcon').removeAttribute('sizes');
+    element('touchIcon').href = `${yearIcon.touchIcon}?v=${assetVersion}`;
+}
+function usesPortraitPoster() {
+    return Boolean(portraitViewport.matches && currentEvent?.portraitPoster);
+}
 const backgroundPoster = document.createElement('img');
 backgroundPoster.id = 'backgroundPoster';
 backgroundPoster.className = 'background-poster';
@@ -13,6 +26,20 @@ backgroundPoster.addEventListener('load', () => {
 });
 document.querySelector('.background').prepend(backgroundPoster);
 
+function updateBackgroundPoster() {
+    if (!currentEvent?.poster) return;
+    const portrait = usesPortraitPoster();
+    const poster = portrait ? currentEvent.portraitPoster : currentEvent.poster;
+    const posterUrl = `${poster}?v=${assetVersion}`;
+    if (backgroundPoster.getAttribute('src') !== posterUrl) {
+        document.documentElement.style.setProperty('--poster', `url("${posterUrl}")`);
+        backgroundPoster.src = posterUrl;
+        backgroundPoster.hidden = false;
+        element('backgroundVideo').poster = posterUrl;
+    }
+    document.documentElement.dataset.backgroundMode = portrait ? 'portrait' : 'default';
+}
+
 element('brandYear').textContent = selection.year || '年份无效';
 element('eventYear').textContent = selection.year || '';
 element('eventTag').textContent = selection.year ? `BW ${selection.year}` : 'BW';
@@ -23,6 +50,7 @@ element('openingHours').hidden = currentEvent?.status !== 'held' || !showOpening
 function yearUrl(year) {
     const url = new URL(location.href);
     url.searchParams.set('year', year);
+    url.searchParams.delete('station');
     url.hash = '';
     return url.href;
 }
@@ -37,10 +65,23 @@ Object.values(BWEvents.events).reverse().forEach(event => {
         status.textContent = '未举办';
         link.append(status);
     }
-    if (event === currentEvent) link.setAttribute('aria-current', 'page');
+    if (event.year === currentEvent?.year) link.setAttribute('aria-current', 'page');
     element('yearLinks').append(link);
 });
 element('returnLink').href = yearUrl(2026);
+
+if (BWEvents.stations[selection.year]) {
+    element('stationPicker').hidden = false;
+    Object.values(BWEvents.stations[selection.year]).forEach(event => {
+        const link = document.createElement('a');
+        const url = new URL(yearUrl(event.year));
+        url.searchParams.set('station', event.station);
+        link.href = url.href;
+        link.textContent = event.stationName;
+        if (event === currentEvent) link.setAttribute('aria-current', 'page');
+        element('stationPicker').append(link);
+    });
+}
 
 if (currentEvent) {
     document.title = `Bilibili World ${currentEvent.year} · ${currentEvent.theme}`;
@@ -54,18 +95,12 @@ if (currentEvent) {
     element('endDate').textContent = endDate.slice(5).replace('-', '.');
     element('farewellBadge').textContent = `哔哩哔哩 · BilibiliWorld ${currentEvent.year}`;
     if (currentEvent.officialUrl) element('officialLink').href = currentEvent.officialUrl;
-    if (currentEvent.poster) {
-        const posterUrl = `${currentEvent.poster}?v=20261124-safe-end`;
-        document.documentElement.style.setProperty('--poster', `url("${posterUrl}")`);
-        backgroundPoster.src = posterUrl;
-        backgroundPoster.hidden = false;
-        element('backgroundVideo').poster = posterUrl;
-    }
+    updateBackgroundPoster();
     document.documentElement.style.setProperty('--background-color', currentEvent.color);
     document.documentElement.dataset.year = currentEvent.year;
     document.documentElement.dataset.eventStatus = currentEvent.status;
     document.querySelector('meta[name="theme-color"]').content = currentEvent.color;
-    if (currentEvent.video) element('backgroundVideo').dataset.src = `${currentEvent.video}?v=20261124-safe-end`;
+    if (currentEvent.video) element('backgroundVideo').dataset.src = `${currentEvent.video}?v=${assetVersion}`;
     if (currentEvent.status === 'not-held') {
         document.title = `Bilibili World ${currentEvent.year} · 当年未举办`;
         element('countdown').dataset.phase = 'not-held';
@@ -82,15 +117,15 @@ if (currentEvent) {
         element('nextEventLink').href = yearUrl(2023);
     }
 } else {
-    document.title = selection.invalid ? 'BW · 年份参数无效' : `BW ${selection.year} · 暂未收录`;
+    document.title = selection.invalid ? 'BW · 年份参数无效' : selection.invalidStation ? `BW ${selection.year} · 站点参数无效` : `BW ${selection.year} · 暂未收录`;
     element('themeName').textContent = '回望历年 BW';
     element('eventLocation').hidden = true;
     element('eventDate').hidden = true;
     element('countdownPanel').hidden = true;
     element('unavailablePanel').hidden = false;
     element('countdown').dataset.phase = 'unavailable';
-    element('unavailableTitle').textContent = selection.invalid ? '年份参数需要四位数字' : `BW ${selection.year} 暂未收录`;
-    element('unavailableMessage').textContent = selection.invalid ? '例如在链接中使用 ?year=2025。也可以从右上角选择已收录年份。' : '请选择其他年份，继续回望与 BW 的时光。';
+    element('unavailableTitle').textContent = selection.invalid ? '年份参数需要四位数字' : selection.invalidStation ? '这个年份没有该站点' : `BW ${selection.year} 暂未收录`;
+    element('unavailableMessage').textContent = selection.invalid ? '例如在链接中使用 ?year=2025。也可以从右上角选择已收录年份。' : selection.invalidStation ? '请选择活动站点，或从「历年」菜单重新选择年份。' : '请选择其他年份，继续回望与 BW 的时光。';
 }
 
 document.addEventListener('click', event => {
@@ -160,10 +195,11 @@ function updateCountdown(now = Date.now()) {
     scheduleTimeFit();
     const state = phase === 'ongoing' ? `${phase}:${openingStatus}` : phase;
     if (state !== lastState) {
+        const name = `BW ${currentEvent.year}${currentEvent.stationName ? ` ${currentEvent.stationName}` : ''}`;
         const copy = {
-            upcoming: [`距 BW ${currentEvent.year} 开场还有`, '准备启航', '下一站，与你在现场相见。'],
-            ongoing: [`BW ${currentEvent.year} 已开场`, openingStatus, open ? '相遇正在发生，尽情享受这场夏日的梦。' : `${showOpeningHours ? '每日 08:00–18:00 开放，' : ''}期待与你在现场相见。`],
-            ended: [`距 BW ${currentEvent.year} 落幕已经`, '期待再会', '旅途虽已到站，热爱仍在继续。']
+            upcoming: [`距 ${name} 开场还有`, '准备启航', '下一站，与你在现场相见。'],
+            ongoing: [`${name} 已开场`, openingStatus, open ? '相遇正在发生，尽情享受这场相聚。' : `${showOpeningHours ? '每日 08:00–18:00 开放，' : ''}期待与你在现场相见。`],
+            ended: [`距 ${name} 落幕已经`, '期待再会', '旅途虽已到站，热爱仍在继续。']
         }[phase];
         countdownTitle.textContent = copy[0];
         eventStatus.textContent = copy[1];
@@ -177,8 +213,8 @@ if (currentEvent?.status === 'held') setInterval(() => updateCountdown(), 1000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) updateCountdown(); });
 
 const video = element('backgroundVideo');
-// 即使页面保留了旧版 loop 属性，也只播放一遍。
-video.loop = false;
+// 按素材性质配置：循环 KV 持续播放，加载动画只播放一遍。
+video.loop = Boolean(currentEvent?.video && currentEvent.loop);
 const motionBtn = element('motionBtn');
 const motionLabel = element('motionLabel');
 const motionIcon = element('motionIcon');
@@ -193,7 +229,7 @@ function updateMotionButton() {
     motionIcon.setAttribute('d', playing ? 'M9 5v14M15 5v14' : 'm8 5 11 7-11 7Z');
 }
 function playBackground(replay = false) {
-    if (videoFailed || !currentEvent?.video) return;
+    if (videoFailed || !currentEvent?.video || usesPortraitPoster()) return;
     if (video.ended && !replay) return;
     if (!video.getAttribute('src')) video.src = video.dataset.src;
     if (video.ended) video.currentTime = 0;
@@ -221,7 +257,13 @@ document.addEventListener('visibilitychange', () => {
     if (document.hidden) video.pause();
     else if (!userPaused && !reducedMotion.matches) playBackground();
 });
-motionBtn.hidden = !currentEvent?.video;
+portraitViewport.addEventListener('change', () => {
+    updateBackgroundPoster();
+    motionBtn.hidden = !currentEvent?.video || videoFailed || usesPortraitPoster();
+    if (usesPortraitPoster()) video.pause();
+    else if (!userPaused && !reducedMotion.matches && !document.hidden) playBackground();
+});
+motionBtn.hidden = !currentEvent?.video || usesPortraitPoster();
 updateMotionButton();
 if (!reducedMotion.matches) playBackground();
 

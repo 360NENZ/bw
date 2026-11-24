@@ -2,7 +2,7 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { events, resolveYear, getClock, shouldShowFarewell } = require('../events.js');
+const { events, stations, resolveYear, getClock, shouldShowFarewell } = require('../events.js');
 const time = value => Date.parse(value);
 
 test('默认 2026，年份独立解析；未收录与错误参数不借用其他届数', () => {
@@ -72,15 +72,15 @@ test('2022 未举办：原定日期不驱动计时或闭馆寄语', () => {
     }
 });
 
-for (const event of Object.values(events).filter(event => event.status === 'held')) {
-    test(`${event.year} 寄语仅在每天闭馆后或整届落幕后展示，遵循北京时间`, () => {
+const heldEvents = [...new Set([...Object.values(events), ...Object.values(stations).flatMap(Object.values)])].filter(event => event.status === 'held');
+for (const event of heldEvents) {
+    test(`${event.year} ${event.stationName || ''} 寄语仅在每天闭馆后或整届落幕后展示，遵循北京时间`, () => {
         const start = event.start;
         for (const [offset, expected] of [
             [-3600000, false], [-1000, false], [0, false],
             [10 * 3600000 - 1000, false], [10 * 3600000, true],
             [16 * 3600000, true], [24 * 3600000 - 1000, true],
-            [24 * 3600000, false], [34 * 3600000, true],
-            [48 * 3600000 - 1000, true], [48 * 3600000, false]
+            [24 * 3600000, false], [34 * 3600000, true]
         ]) assert.equal(shouldShowFarewell(event, start + offset), expected, `${event.year}: ${offset}`);
         assert.equal(shouldShowFarewell(event, event.end - 1000), false);
         assert.equal(shouldShowFarewell(event, event.end), true);
@@ -109,4 +109,65 @@ test('所有收录年份都有本地素材与一致的来源日期，不将缺�
         }
     }
     assert.ok(!sources.gaps.some(source => source.year === 2022));
+});
+
+test('2019 三站与 2020 两站各自使用日期、场馆和素材，旧链接保持默认站点', () => {
+    const expected = [
+        [2019, 'guangzhou', '2019-08-16', '2019-08-18', '广州 · 保利世贸博览馆'],
+        [2019, 'shanghai', '2019-10-04', '2019-10-06', '上海 · 新国际博览中心'],
+        [2019, 'chengdu', '2019-12-21', '2019-12-22', '成都 · 世纪城新国际会展中心'],
+        [2020, 'shanghai', '2020-08-07', '2020-08-09', '上海 · 国家会展中心'],
+        [2020, 'guangzhou', '2020-12-26', '2020-12-27', '广州 · 广交会展馆']
+    ];
+    for (const [year, station, start, end, venue] of expected) {
+        const event = resolveYear(`?year=${year}&station=${station}&showHours=1`).event;
+        assert.equal(event, stations[year][station]);
+        assert.equal(event.startDate, start);
+        assert.equal(event.endDate, end);
+        assert.equal(event.venue, venue);
+        assert.equal(getClock(event, time(`${start}T07:59:59+08:00`)).phase, 'upcoming');
+        assert.deepEqual(getClock(event, event.start).values, [0, 0, 0, 0]);
+        assert.equal(getClock(event, event.end - 1).phase, 'ongoing');
+        assert.equal(getClock(event, event.end).phase, 'ended');
+        assert.deepEqual(getClock(event, event.end + 1000).values, [0, 0, 0, 1]);
+        // 每一天 08:00 开场与 18:00 闭馆；末日之后持续显示寄语。
+        for (let day = event.start; day < event.end; day += 86400000) {
+            assert.equal(shouldShowFarewell(event, day), false);
+            assert.equal(shouldShowFarewell(event, day + 10 * 3600000), true);
+        }
+    }
+    assert.equal(resolveYear('?year=2019').event.station, 'guangzhou');
+    assert.equal(resolveYear('?year=2020').event.station, 'shanghai');
+    assert.equal(new Set(expected.map(([year, station]) => stations[year][station].video)).size, 5);
+    const now = time('2019-10-05T12:00:00+08:00');
+    assert.equal(getClock(stations[2019].guangzhou, now).phase, 'ended');
+    assert.equal(getClock(stations[2019].shanghai, now).phase, 'ongoing');
+    assert.equal(getClock(stations[2019].chengdu, now).phase, 'upcoming');
+});
+
+test('错误或不属于该年份的站点不套用默认日期', () => {
+    for (const search of ['?year=2019&station=', '?year=2019&station=beijing', '?year=2020&station=chengdu', '?year=2021&station=shanghai', '?year=2022&station=guangzhou', '?station=shanghai', '?year=2019&station=toString']) {
+        const result = resolveYear(search);
+        assert.equal(result.invalidStation, true, search);
+        assert.equal(result.event, null, search);
+        assert.equal(shouldShowFarewell(result.event), false, search);
+    }
+});
+
+test('站点素材与来源清单一致，广州 2020 不混入上海或 BML 日期', () => {
+    const sources = JSON.parse(fs.readFileSync(path.join(__dirname, '../assets/sources.json')));
+    for (const [year, cities] of Object.entries(stations)) {
+        const source = sources.years.find(source => String(source.year) === year);
+        for (const event of Object.values(cities)) {
+            const record = source.stations.find(station => station.station === event.station);
+            assert.deepEqual(record.dates, [event.startDate, event.endDate]);
+            assert.equal(record.venue, event.venue);
+            for (const kind of ['poster', 'video']) {
+                assert.equal(record[kind], event[kind]);
+                assert.ok(fs.statSync(path.join(__dirname, '..', event[kind])).size > 10000);
+                assert.ok(source.assets.some(asset => asset.file === event[kind]));
+            }
+        }
+    }
+    assert.match(sources.years.find(source => source.year === 2020).stations.find(station => station.station === 'guangzhou').ticketPage, /id=31820$/);
 });
