@@ -64,4 +64,4 @@
 
 运行 `node --test tests/countdown.test.cjs`，验证年份解析、真实日期、各届开闭馆与落幕边界、长期正计时及本地素材。已使用 Edge / Playwright 检查所有收录年份、缺失与错误参数、时间提示组合、各年份寄语一致性、菜单切换、320px 与 360px 布局、视频开关、失败回退和直接打开本地 HTML。2021 加载动画的播放结束停留、手动重播、后台返回与减少动态效果切换不重播、完整海报和官方页面链接也已验证。
 
-制作鸣谢：lrastar / Gemini3 Pro / 360NENZ / Codex（gpt-6.1-sol）。
+制作鸣谢：lrastar / Gemini3 Pro / 360NENZ / Codex（gpt-6.1-sol） / Antigravity（Gemini 3.8 Flash）。
