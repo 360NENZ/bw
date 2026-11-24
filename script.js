@@ -109,27 +109,30 @@ let videoFailed = false;
 let userPaused = false;
 
 function updateMotionButton() {
-    const playing = !video.paused;
-    motionLabel.textContent = playing ? '暂停背景' : '播放背景';
+    const playing = !video.paused && !video.ended;
+    motionLabel.textContent = video.ended ? '重播背景' : playing ? '暂停背景' : '播放背景';
     motionBtn.title = motionLabel.textContent;
     motionIcon.setAttribute('d', playing ? 'M9 5v14M15 5v14' : 'm8 5 11 7-11 7Z');
 }
-function playBackground() {
+function playBackground(replay = false) {
     if (videoFailed || !currentEvent?.video) return;
+    if (video.ended && !replay) return;
     if (!video.getAttribute('src')) video.src = video.dataset.src;
+    if (video.ended) video.currentTime = 0;
     video.play().catch(updateMotionButton);
 }
 video.addEventListener('playing', () => { video.classList.add('is-playing'); updateMotionButton(); });
 video.addEventListener('pause', updateMotionButton);
+video.addEventListener('ended', updateMotionButton);
 video.addEventListener('error', () => {
     videoFailed = true;
     video.classList.remove('is-playing');
     motionBtn.hidden = true;
 });
 motionBtn.addEventListener('click', () => {
-    userPaused = !video.paused;
+    userPaused = !video.paused && !video.ended;
     if (userPaused) video.pause();
-    else playBackground();
+    else playBackground(true);
 });
 reducedMotion.addEventListener('change', event => {
     if (event.matches) video.pause();
